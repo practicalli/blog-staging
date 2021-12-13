@@ -186,6 +186,14 @@ http://practical.li/blog-staging/posts/2016-01-07-docs/index.html
 </url>
 <url>
 <loc>
+http://practical.li/blog-staging/posts/clojure-cli-tools-understanding-aliases/index.html
+</loc>
+<lastmod>
+2021-12-13
+</lastmod>
+</url>
+<url>
+<loc>
 http://practical.li/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/index.html
 </loc>
 <lastmod>
