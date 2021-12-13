@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: Clojure web server from scratch with deps.edn</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/posts/clojure-web-server-cli-tools-deps-edn/">
+    <title>Practicalli: Clojure CLI tools - understanding flags</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/clojure-cli-tools-flags/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -57,10 +57,10 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">November 15, 2019</div>
+        <div class="col-lg-6">December 15, 2021</div>
         
     </div>
-    <h2>Clojure web server from scratch with deps.edn</h2>
+    <h2>Clojure CLI tools - understanding flags</h2>
 
     <!-- conditional topic logo displayed if :topic has value in a post -->
     
@@ -69,7 +69,20 @@
 </div>
 <div>
     
-    <p>Discover how to build a Clojure web server from the ground up using Clojure CLI tools to create and run the project and <code>deps.edn</code> to manage the dependencies.</p><p>Update: <a href="https://practicalli.github.io/clojure-webapps/">Practicalli Clojure WebApps</a> has newer versions of this guide.  Take a look at the Status Monitor and Banking on Clojure projects</p><blockquote><p>This project will be used to build a web server that will serve our API, which we will build in future posts and <a href="http://yt.vu/+practicalli">study group broadcasts</a>.</p></blockquote><!-- more --><h1 id="create-a-project">Create a project</h1><p>A new project could be made by manually creating a few files and directories.  The <a href="https://github.com/seancorfield/clj-new">clj-new project</a> provides a convienient was to create a project from a template. The <a href="https://github.com/practicalli/clojure-deps-edn">practicalli/clojure-deps-edn configuration</a> contains the <code>:project/new</code> alias.</p><p>In a terminal, create the project called <code>practicalli/simple-api-server</code></p><pre><code class="shell">clojure -M:project/new app practicalli/simple-api-server
+    <p>Clojure CLI tools provide a very flexible way to run Clojure and uses aliases to include community libraries and tools for working with Clojure projects. Understand the command line options (flags) that can be used with aliases ensures an effective use of Clojure CLI tools.</p><p>Clojure CLI tools was <a href="https://clojure.org/releases/tools#v1.10.1.510">first released in February 2020</a> with a specific focus on running Clojure code quickly and easily, which also required the management of dependencies from Maven, Git and a local file space.</p><p>Since that release the design has evolved to provide clojure.exec (<code>-X</code>) to run any Clojure function not just <code>-main</code> as with clojure.main (<code>-M</code>). In July 2021, the ability to run tools (<code>-T</code>) which are independent from the Clojure project classpath was also introduced.</p><p>The command line flags have evolved to enable these features, so lets explore those flags and show how each flag should be used.</p><!-- more --><h2 id="flags-cheatsheet">Flags cheatsheet</h2><ul><li><code>-A</code> - [Deprecated] use <code>-M</code> instead</li><li><code>-M</code> - Call <code>-main</code> function of the given namespace (using <code>-m</code> flag), as defined in the last alias in the chain or on the command line</li><li><code>-X</code> - Call the <code>:exec-fn</code> function from the last alias in chain, passing <code>:exec-args</code> value as arguments</li><li><code>-T</code> - Install tool with alias name, runs tool with tool name (alias name without <code>:</code>)</li><li><code>-P</code> - dry run - downloads dependencies for all aliases but does not execute a function</li></ul><blockquote><p>Aliases can be changed together to merge their configuration, e.g. <code>clojure -M:env/dev:repl/rebel</code> included the configuration from both <code>:env/dev</code> and <code>:repl/rebel</code>.  With the <code>-M</code> flag, only the <code>:main-opts</code> from the last alias in the chain (right-most alias name) is used, unless over-ridden on the command line with the <code>-m</code> flag.</p></blockquote><p>Clojure CLI tools has some built in tools under the special <code>:deps</code> alias (not to be confused with the <code>:deps</code> configuration in a <code>deps.edn</code> file)</p><ul><li><code>-X:deps mvn-install</code> - install a maven jar to the local repository cache</li><li><code>-X:deps git-resolve-tags</code> - Resolve git coord tags to shas and update deps.edn</li><li><code>-X:deps find-versions</code> - Find available versions of a library</li><li><code>-X:deps prep</code> - download libraries in the dependency tree (if not cached)</li></ul><blockquote><p>See <code>clojure --help</code> for other descriptions and examples (or just read this article further)</p></blockquote><h2 id="-m-clojuremain">-M clojure.main</h2><p>Clojure code has historically been run using <code>clojure.main</code> which looks for a <code>-main</code> function in the given namespace.  This is the approach Leiningen has always used.</p><p>Running your Clojure project without any additional aliases on the command line</p><pre><code class="bash">clojure -M -m practicalli/sudoku-solver
+</code></pre><p>Running your Clojure project with an alias called <code>:alias/name</code> on the command line will merge any values for <code>:extra-paths</code> and <code>extra-deps</code> into the call, but will ignore any <code>:main-opts</code> as this is over-ridden on the command line using the <code>-m</code> flag.</p><pre><code class="bash">clojure -M:alias/name -m practicalli/sudoku-solver
+</code></pre><h2 id="-x-clojureexec">-X clojure.exec</h2><p>Run a function on the commmand line</p><p>Run a function from an alias</p><p>Override default arguments (project/new example)</p><h2 id="-t-tools">-T tools</h2><p>Install a tool</p><p>Run a tool</p><blockquote><p>Installing a tool adds an EDN configuration file in <code>$HOME.clojure/tools/</code> (or $XDG_HOME/.clojure/tools/) directory.  Placing the <code>.clojure</code> directory in version control will reduce the need to install tools, until there is a new version.  It would be great to have antq also update tools aliases to their latest versions as it does with other aliases.</p></blockquote><blockquote><p>NOTE: move to a separate blog post - Clojure CLI tools - understanding the deps.edn configuration file</p></blockquote><h2 id="the-depsedn-configuration-file">The deps.edn configuration file</h2><p>A deps.edn file has several sections</p><ul><li>:paths - a vector of directory names always included in the project class path, <code>["src" "resources"]</code></li><li>:deps - a map of dependencies always included in the project (<a href="https://github.com/practicalli/banking-on-clojure-webapp/blob/live/deps.edn#L4-L19">practicalli/banking-on-clojure example</a>)</li><li>:mvn/repos - a map of repositories to download Maven dependencies from (<a href="https://github.com/practicalli/clojure-deps-edn/blob/live/deps.edn#L1140-L1161">practialli/clojure-deps-edn examples</a>)</li><li>:aliases - a map of optional libraries and tools, the key being the alias name and its value the configuration (<a href="https://github.com/practicalli/clojure-deps-edn/blob/live/deps.edn#L42">practicalli/clojure-deps-edn examples</a>)</li></ul><h2 id="what-is-an-alias">What is an alias?</h2><p>An alias is a way to add optional libraries or additional functionality to Clojure CLI tools, via a <code>deps.edn</code> configuration file.</p><p>An alias name is a keyword in Clojure, e.g. <code>:env/test</code>, so the <code>:</code> is part of the alias name.</p><p>As aliases are optional, they provide a way to add libraries and tools that are only needed for development and testing of Clojure projects.  For example, adding the <code>test</code> and <code>dev</code> directories to the Classpath, or test runners such as Kaocha.</p><p>This example adds Kaocha test running in watch mode using the <code>:test/run</code> alias name.  Using <code>clojure -M:test/watch</code> uses <code>clojure.main</code> to run Kaocha, passing in the <code>:main-opts</code> arguments.  Using <code>clojure -X:test/watch</code> uses <code>clojure.exec</code> to run the <code>exec-fn</code> function, passing the <code>exec-args</code> arguments.</p><pre><code class="clojure">:aliases
+{
+  :test/watch
+  {:extra-paths ["test"]
+   :extra-deps {lambdaisland/kaocha {:mvn/version "1.60.945"}}
+   :main-opts   ["-m" "kaocha.runner" "--watch" "--fail-fast" "--skip-meta" ":slow"]
+   :exec-fn kaocha.runner/exec-fn
+   :exec-args {:watch? true
+               :randomize? false
+               :fail-fast? true}}
+}
+</code></pre><blockquote><p>NOTE: most tools are moving to the -X clojure.exec approach or to the <code>-T</code> tools approach.  Configuration for both approaches is not required, but typically provided for convenience.</p></blockquote><p>The configuration keys that can be used to define an alias:</p><ul><li><code>extra-paths</code> - a vector of directory names always included in the project class path, <code>["dev" "test"]</code></li><li><code>:extra-deps</code> - a map of additional library dependencies</li><li><code>:main-opts</code> - a vector of command line options passed to <code>clojure.main</code></li><li><code>exec-fn</code> - the fully qualified name of a function to be run by <code>clojure.exec</code></li><li><code>exec-args</code> - default arguments passed to the function, over-ridden by matching argument keys specified on the command line</li></ul><blockquote><p>Lesser used keys <code>:replace-paths</code> and <code>:replace-deps</code> use only the specified dependencies and directories, ignoring the project dependencies and class path. This approach is now replaced by defining an alias for use with the tool <code>-T</code> flag.</p></blockquote><p>Aliases can be added to the <code>deps.edn</code> file for a specific Clojure project, or added to a <code>$HOME/.clojure/deps.edn</code> (or <code>$XDG_HOME/.clojure.edn</code>) file for use with any Clojure project, as can be seen in <a href="https://github.com/practicalli/clojure-deps-edn">practicalli/clojure-deps-edn</a>.</p><h2></h2><h1 id="create-a-project">Create a project</h1><p>A new project could be made by manually creating a few files and directories.  The <a href="https://github.com/seancorfield/clj-new">clj-new project</a> provides a convienient was to create a project from a template. The <a href="https://github.com/practicalli/clojure-deps-edn">practicalli/clojure-deps-edn configuration</a> contains the <code>:project/new</code> alias.</p><p>In a terminal, create the project called <code>practicalli/simple-api-server</code></p><pre><code class="shell">clojure -M:project/new app practicalli/simple-api-server
 </code></pre><p>This creates a Clojure namespace (file) called <code>simple-api-server</code> in the <code>practicalli</code> domain.  The project contains the <code>clojure.core</code>, <code>test.check</code> and <code>test.runner</code> libraries by default.</p><p>The <code>deps.edn</code> file defines two aliases (possibly a few more).</p><ul><li><code>:test</code> includes the <code>test.check</code> library and test code files under the <code>test</code> path.</li><li><code>:runner</code> sets the main namespace to that of the test runner, calling the <code>-main</code> function in that namespace which then runs all the tests under the directory <code>test</code>.</li></ul><p><strong>deps.edn</strong></p><pre><code class="clojure">
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}}
@@ -185,10 +198,8 @@ the <code>:or</code> map provides local symbols and their default values</p><pre
 
     <div id="prev-next">
         
-        <a href="/blog-staging/posts/webapp-routes-with-json/">&laquo; Clojure Webapp routing and APIs with JSON</a>
         
-        
-        <a class="right" href="/blog-staging/posts/streamline-contributions-with-github-pull-request-templates/">Streamline Contributions with GitHub Pull Request Templates &raquo;</a>
+        <a class="right" href="/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/">Automate Cryogen Clojure blog with GitHub Actions &raquo;</a>
         
     </div>
 
@@ -196,8 +207,8 @@ the <code>:or</code> map provides local symbols and their default values</p><pre
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = "http://practical.li/blog-staging/posts/clojure-web-server-cli-tools-deps-edn/";
-            this.page.identifier = "Clojure web server from scratch with deps.edn";
+            this.page.url = "http://practical.li/blog-staging/posts/clojure-cli-tools-flags/";
+            this.page.identifier = "Clojure CLI tools - understanding flags";
         };
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
