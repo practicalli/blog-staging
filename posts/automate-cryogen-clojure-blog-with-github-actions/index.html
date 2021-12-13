@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Practicalli: Automate Cryogen Clojure blog with GitHub Actions</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog-staging/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/blog-staging/">
+              <img src="/blog-staging//images/practicalli-logo-name.png" alt="Practicalli logo" />
+            </a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog-staging/">Home</a></li>
+                <li
+                ><a href="/blog-staging/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog-staging/pages/about/">About</a>
+                </li>
+                
+                <li><a href="/blog-staging/feed.xml">RSS</a></li>
+                <li><a href="https://github.com/practicalli/blog-content/projects/1">Feedback</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">August 28, 2021</div>
+        
+    </div>
+    <h2>Automate Cryogen Clojure blog with GitHub Actions</h2>
+
+    <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="/blog-staging/images/cryogen-logo-name.png" alt="cryogen logo" />
+    
+</div>
+<div>
+    
+    <p><a href="https://practical.li/blog/posts/clojure-powered-blogging-with-cryogen/">Practicalli uses Cryogen static site generator for its blog website</a>.  Cryogen is fast and simple to use thanks to the Clojure EDN file used for configuration.</p><p>Cryogen documentation shows <a href="https://cryogenweb.org/docs/deploying-to-github-pages.html">how to publish a Cryogen blog to GitHub pages</a> using Git command.  The deployment can be automated using GitHub actions, so that a new version of the site is deployed when Pull Requests are merged to the specified branch (or on direct commits to that branch).</p><!-- more --><h2 id="what-does-the-github-workflow-do">What does the GitHub workflow do?</h2><p>This is a combination of GitHub actions, each doing a specific part of the automated workflow.</p><p>The <strong>publish</strong> job runs on an Ubuntu docker image and the <strong>Checkout</strong> step performs a git checkout of the project into the docker image.</p><p><strong>Prepare Java</strong> step uses the <a href="https://github.com/actions/setup-java">setup-java action</a> to add Java 11 to the docker image, using the Eclipse Foundation <code>temurin</code> image (<a href="https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/">OpenJDK / AdoptOpenJDK is now part of the Eclipse Foundation</a>).</p><p><strong>Install clojure tools</strong> step uses the <a href="https://github.com/DeLaGuardo/setup-clojure">setup-clojure action</a> to add the specified version of Clojure CLI tools (Leiningen and Boot build tools are also supported)</p><p><strong>Build blog site</strong> step calls the Cryogen function using Clojure CLI tools to build the static site</p><p><strong>Publish to GitHub pages</strong> step uses the <a href="https://github.com/JamesIves/github-pages-deploy-action">github-pages-deploy-action</a> to deploy a specific directory, the directory built by Cryogen, to another branch of the original repository or a different repository. If the branch does not exist, the action will create it.</p><h2 id="deploying-to-other-repositories">Deploying to other repositories</h2><p>When deploying the Cryogen site to the same GitHub repository as the source files, the <a href="https://github.com/JamesIves/github-pages-deploy-action">github-pages-deploy-action</a> does not require an explicit token to be added. The action uses the default repository scoped GitHub token.</p><p>If deploying the site to another repository from that of its source files, create a GitHub secret with a value of a Personal Access Token (PAT). The personal access token should have the least permissions necessary, usually only <code>repo</code>.</p><p>A GitHub secret can be added at user or organisation level and configured for specific repositories.</p><h2 id="add-github-action">Add GitHub Action</h2><p>Create a file called <code>.github/workflows/cryogen-publish.yml</code> and add a workflow configuration.</p><pre><code class="json">name: Publish Blog
+on:
+  push:
+    branches:
+    - live
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@3.5
+        with:
+          cli: 1.10.3.943
+
+      - name: Build Blog site
+        run: clojure -M:build
+
+      - name: Publish to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          commit-message: ${{ github.event.head_commit.message }}
+          branch: gh-pages                                      # branch to deploy to
+          single-commit: yes                                    # no commit history
+          folder: public/blog                                   # directory to deploy from
+</code></pre><h2 id="github-action-configuration-with-token">GitHub Action configuration with token</h2><p>If deploying to a different repository than the source, then add a token to either a <a href="https://docs.github.com/en/actions/reference/encrypted-secrets">repository, account or organisation secret</a>.  Use a <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token">GitHub Personal Access Token</a> for the value of the token secret.</p><pre><code class="json">      - name: Publish to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          commit-message: ${{ github.event.head_commit.message }}
+          token: ${{ secrets.PRACTICALLI_BLOG_PUBLISH_TOKEN }}  # GitHub secret
+          repository-name: practicalli/deployed-blog            # repository to deploy to
+          branch: gh-pages                                      # branch to deploy to
+          single-commit: yes                                    # no commit history
+          folder: public/blog                                   # directory to deploy from
+</code></pre><h2 id="deploying-to-aws-s3-bucket">Deploying to AWS S3 bucket</h2><p>Cryogen can also be published to an Amazon S3 bucket by taking the above GitHub action and replacing the <strong>Publish to GitHub Pages</strong> step.</p><p>Add the following step in its place and add GitHub secrets to the Git Repository for AWS access and the name of the AWS bucket.</p><pre><code class="json">    - name: Publish to AWS S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --follow-symlinks --delete --acl public-read
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'eu-west-2'
+        SOURCE_DIR: 'public/blog'
+</code></pre><blockquote><p>NOTE: also check the AWS region is the correct one for your needs</p></blockquote><h2 id="summary">Summary</h2><p>Once the <code>.github/workflows/cryogent-publish.yml</code> file is committed to the default branch of the repository, any commits to that branch or merged pull requests to that branch will trigger the workflow and publish a new version of the Cryogen static website.</p><p>Consider adding linters and other GitHub Actions to check for potential issues with markdown and other aspects of the website, to avoid checking in content that may break the website.</p><p>Setting up monitoring of the website is also recommended, using simple monitoring tools such as <a href="https://www.statuscake.com/">StatusCake</a>.</p><p>Thank you.
+<a href="https://twitter.com/practical_li">Practicalli</a></p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog-staging/tags/cryogen/">cryogen</a>
+    
+    <a href="/blog-staging/tags/blogging/">blogging</a>
+    
+    <a href="/blog-staging/tags/github-actions/">github-actions</a>
+    
+    <a href="/blog-staging/tags/static-sites/">static-sites</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/">Overview of Language Server Protocol LSP for Clojure development &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://practical.li/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/";
+            this.page.identifier = "Automate Cryogen Clojure blog with GitHub Actions";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//practicalli-blog.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://practical.li/">Practicalli Home</a></li>
+                    <li><a href="http://yt.vu/+practicalli">YouTube channel</a></li>
+                    <li><a href="https://github.com/practicalli/blog-content/projects/1">Feeback / Issues</a></li>
+                    
+                    <li><a href="/blog-staging/pages/contributing/">Contributing</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/">Automate Cryogen Clojure blog with GitHub Actions</a></li>
+                        
+                        <li><a href="/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/">Overview of Language Server Protocol LSP for Clojure development</a></li>
+                        
+                        <li><a href="/blog-staging/posts/brave-clojure-redux-part01-the-repl/">Brave Clojure redux - part 1 - the REPL</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojure-repl-jack-in-or-connect/">Clojure CLI tools - To jack-in or connect, that is the question</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojure-cli-aliases-deserve-designing-too/">Clojure CLI tools aliases deserve good design too</a></li>
+                        
+                        <li><a href="/blog-staging/posts/cloure-community-getting-help/">Clojure community - getting help</a></li>
+                        
+                        <li><a href="/blog-staging/posts/web-scraping-with-clojure-hacking-hacker-news/">Web Scraping with Clojure - Scraping Hacker News</a></li>
+                        
+                        <li><a href="/blog-staging/posts/raising-spacemacs-issues-and-pull-requests/">Spacemacs - raising issues and pull requests</a></li>
+                        
+                        <li><a href="/blog-staging/posts/lenovo-x1-extreme-gen2-ubuntu-install/">Ubuntu install on Lenovo X1 Extreme 2nd Gen with RAID</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/tags/json/">json</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ring/">ring</a></li>
+                        
+                        <li><a href="/blog-staging/tags/very%20fetch/">very fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ubuntu/">ubuntu</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lsp/">lsp</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cryogen/">cryogen</a></li>
+                        
+                        <li><a href="/blog-staging/tags/aliases/">aliases</a></li>
+                        
+                        <li><a href="/blog-staging/tags/challenges/">challenges</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github/">github</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure/">clojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/httpkit/">httpkit</a></li>
+                        
+                        <li><a href="/blog-staging/tags/webapps/">webapps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-cli/">clojure-cli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/pull-requests/">pull-requests</a></li>
+                        
+                        <li><a href="/blog-staging/tags/editors/">editors</a></li>
+                        
+                        <li><a href="/blog-staging/tags/tools-deps/">tools-deps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/hardware/">hardware</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cider/">cider</a></li>
+                        
+                        <li><a href="/blog-staging/tags/emacs/">emacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clj-http/">clj-http</a></li>
+                        
+                        <li><a href="/blog-staging/tags/calva/">calva</a></li>
+                        
+                        <li><a href="/blog-staging/tags/thinkpad/">thinkpad</a></li>
+                        
+                        <li><a href="/blog-staging/tags/events/">events</a></li>
+                        
+                        <li><a href="/blog-staging/tags/community/">community</a></li>
+                        
+                        <li><a href="/blog-staging/tags/advent-of-parens/">advent-of-parens</a></li>
+                        
+                        <li><a href="/blog-staging/tags/spacemacs/">spacemacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/help/">help</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lenovo/">lenovo</a></li>
+                        
+                        <li><a href="/blog-staging/tags/compojure/">compojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/klipse/">klipse</a></li>
+                        
+                        <li><a href="/blog-staging/tags/figwheel-main/">figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/tags/not%20fetch/">not fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/web-scraper/">web-scraper</a></li>
+                        
+                        <li><a href="/blog-staging/tags/blogging/">blogging</a></li>
+                        
+                        <li><a href="/blog-staging/tags/conjure/">conjure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github-actions/">github-actions</a></li>
+                        
+                        <li><a href="/blog-staging/tags/apis/">apis</a></li>
+                        
+                        <li><a href="/blog-staging/tags/static-sites/">static-sites</a></li>
+                        
+                        <li><a href="/blog-staging/tags/re-clojure/">re-clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>
+      Copyright &copy; 2021 Practicalli
+      <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p>
+
+      <license id="license">
+        <div>
+          <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution 4.0 ShareAlike License</a>, including custom images & stylesheets.</p>
+          <p>Permissions beyond the scope of this license may be available by contacting <a xmlns:cc="http://creativecommons.org/ns#" href="https://twitter.com/practical_li" rel="cc:morePermissions">@practical_li</a></p>
+          <br>
+          <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+      </license>
+
+    </footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog-staging/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
