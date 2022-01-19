@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: Yet Another Post</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/posts/2014-11-04-second-post/">
+    <title>Practicalli: spacemacs - adding custom snippets to yasnippet</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/spacemacs-adding-your-own-yasnippets/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -57,33 +57,67 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">November 4, 2014</div>
+        <div class="col-lg-6">July 23, 2016</div>
         
     </div>
-    <h2>Yet Another Post</h2>
+    <h2>spacemacs - adding custom snippets to yasnippet</h2>
 
     <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="/blog-staging/images/spacemacs-logo-name.png" alt="spacemacs logo" />
     
 </div>
 <div>
     
-    <h3 id="this-post-so-fetch">This Post So Fetch</h3><p>some more stuff happened</p>
+    <p>Using yasnippet saves time by avoiding the need to write boilerplate code and minimising other commonly typed content.  YASnippet contains mode-specific snippets that expand to anything from a simple text replacement to a code block structure that allows you to skip through parameters and other sections of the code block.  See YASnippet in action in this <a href="https://www.youtube.com/watch?v=-4O-ZYjQxks">Emacs Yasnippet video</a>.</p><p>Spacemacs has lots of snippets for most of the languages and modes it supports.  However, YASnippets also uses a simple template system in plain text, so its pretty easy to learn.  Lets look at how to add your own snippets with Spacemacs.</p><blockquote><p>In Spacemacs <code>M-/</code> calls <code>yas-expand</code> funciton, usually bound to <code>TAB</code> in Emacs.</p></blockquote><!-- more --><h2 id="adding-your-private-snippets-to-spacemacs">Adding your private snippets to Spacemacs</h2><p>The easiest place to add your own snippet definitions is in the <code>~/.emacs.d/private/snippets</code> directory.  Under this directory structure you should create a folder named after the relevant mode for your snippets, eg <code>markdown-mode</code>.  Inside this mode folder, create files whos names are based on the snippet alias you wish.</p><p>So for a work in progress snipped called <code>wip</code> in markdown mode I created <code>~/.emacs.d/private/snippets/markdown-mode/wip</code> file.</p><p>You need to load this new snippet into Spacemacs by either restarting or using the command <code>M-x yas-load-snippet-buffer</code> command in the buffer of the new snippet you have just written.  Ths snippet with then work within any markdown mode buffer.</p><h2 id="managing-your-snippets">Managing your snippets</h2><p>Although the private snippets directory is easy to use, it is not under version control.  So although its not over-riddend by Spacemacs it also means your private snippets are not backed up anywhere.</p><p>If you use the <code>~/.spacemacs.d/snippets/modename-mode/</code> directory structure for your snippets then you can version them with Git or similar versioning tools.</p><h2 id="how-to-write-a-snippet">How to write a snippet</h2><p>Typically each snippet template is contained in its own file, named after the alias of the snippet.  So a snippet called <code>wip</code> will be in a filename wip, in a directory named after the relevant Emacs mode.</p><p>The basic structure of a snippet template is:</p><pre><code>#key : the name of the snippet you type
+#name : A description of the snippet (this shows in autocompletion menu too)
+#contributor: John Stevenson &lt;john@jr0cket.co.uk&gt;
+# --
+Add the content you want to replace the snippet name with when it expands
+</code></pre><p>The content can be anything, simple text or more usefully a code strucuture with placeholders for tab stops.  You can even include Emacs lisp (elisp) code in there too.</p><h2 id="example-simple-text-replacement">Example: Simple text replacement</h2><p>I use markdown mode for writing a lot of content, especially for technical workshops.  As I am developing these workshops its useful to highlight which sections are still work in progress.  Rather than type the common message I use, I've created a simple snippet called <code>wip</code>.</p><pre><code>#key : wip
+#name : WorkInProgress
+#contributor: John Stevenson &lt;john@jr0cket.co.uk&gt;
+# --
+&gt; **Fixme** work in progress
+</code></pre><p>When you expand this snippet with <code>M-/</code> then the snippet name is replaced by the content.</p><h2 id="example-using-tab-stops">Example: Using tab stops</h2><p>Lets look at an existing snippet called <code>form</code> in the <code>html-mode</code>.  This expands into a html form, but also helps you jump from method, id, action and content.</p><pre><code>#contributor : Jimmy Wu &lt;frozenthrone88@gmail.com&gt;
+#name :&lt;form method="..." id="..." action="..."&gt;&lt;/form&gt;
+# --
+&lt;form method="$1" id="$2" action="$3"&gt;
+  $0
+&lt;/form&gt;
+</code></pre><p>This snippet is the same as the simpler example, except we have added <strong>tab stops</strong> using the <code>$</code> sign and a number.  When you expand this snippet, the snippet name is replaced by the content as usual but the cursor is placed at the first tab stop <code>$1</code>.  Each time you press <code>TAB</code> you move to the next tab stop.</p><p><code>$0</code> is our exit point from the snippet, so pressing <code>TAB</code> reverts to the usual behaviour outside of YASnippet.</p><h2 id="creating-a-snippet-from-existing-text">Creating a snippet from existing text</h2><p>A really fast way of creating a new snippet is to use a finished version of what you would like the snippet to expand to.  For a simple text replacement you just hightlight all the text and call <code>helm-yas-create-snippet-on-region</code>, save the snippet and you are done.</p><p>For a code structure with tab stops, simply hightlhght a completed code stucture, call <code>helm-yas-create-snippet-on-region</code> and edit the body of your snippet to replace the specific names and values with tab stop placeholders, <code>$1</code> <code>$2</code>, <code>$3</code>, etc.</p><h2 id="example-create-a-simple-text-replacement">Example: Create a simple text replacement</h2><p>When I write blogs I include a image thumbnail that gives a visual clue as to the topic of the article.  Rather than type this in I created a snippet.</p><p>First I mark the text I want my new snippet to expand too, in this example: ** {% raw %} {% img img-thumbnail /images/spacemacs.png %} {% endraw %} **.</p><p>Then I call the function <code>helm-yas-create-snippet-on-region</code>.  This prompts me for the mode for the snippet, in this case markdown-mode, then prompts for the location for the snippet file, <code>~/.emacs/private/snippets/markdown-mode/imgtmb-spacemacs</code>.  A new buffer is created with my snippet already filled in.</p><pre><code># -*- mode: snippet -*-
+#name : imgtmb-spacemacs
+#key : imgtmb-spacemacs
+#contributor : jr0cket
+# --
+{% img img-thumbnail /images/spacemacs.png %}
+
+</code></pre><p>The new snippet buffer already has the name and key values populated from the filename I gave for the snippet, <code>imgtmb-spacemacs</code>.  The snippet body is also populated automatically from the text I had highlighted.  So all I need to do is save the new snippet and try it out.</p><h2 id="testing-your-snippets">Testing your snippets</h2><p>Once you have written your snippet, you can quickly test it using <code>M-x yas-tryout-snippet</code>.  This opens a new empty buffer in the appropriate major mode and inserts the snippet so you can then test it with <code>M-/</code>.</p><p>If you just want to try the snippet in an existing buffer, then use <code>M-x yas-load-snippet-buffer</code> to load this new snippet into the correct mode.  <code>M-x yas-load-snippet-buffer</code> does exactly the same except it kills the snippet buffer (prompting to save first if neccessary).</p><blockquote><p>There are no default keybindings for these commands in Spacemacs, so you could create a binding under <code>C-o</code>, for example <code>C-o C-s t</code> to try a snippet and <code>C-o C-s l</code> to load a snippet.</p></blockquote><h2 id="adding-yas-snippets-to-autocompletion-in-spacemacs">Adding yas-snippets to autocompletion in Spacemacs</h2><p>Configure the <code>auto-completion</code> layer to show YASnippets when typing.</p><p><code>auto-completion-enable-snippets-in-popup</code> shows the snippets in the auto-completion popup.</p><p><code>auto-completion-enable-sort-by-usage</code> shows commonly used matching snippets at the top of the completion popup menu.</p><pre><code class="elisp">(auto-completion :variables
+                 auto-completion-enable-help-tooltip t
+                 auto-completion-enable-snippets-in-popup t
+                 auto-completion-enable-sort-by-usage t)
+</code></pre><h2 id="summary">Summary</h2><p>Find out more about YASnippets and autocompletion from the <a href="https://github.com/syl20bnr/spacemacs/tree/master/layers/auto-completion">Github repository for Spacemacs autocompletion layer</a>.</p><p>For more details and examples on writing your own snipplets, take a look at:</p><ul><li><a href="https://www.youtube.com/watch?v=-4O-ZYjQxks">Emacs YASnippet video tutorial</a></li><li><a href="https://joaotavora.github.io/yasnippet/snippet-development.html">Snippet development</a>.</li><li><a href="http://jotham-city.com/blog/2015/03/21/adding-yasnippets-snippets/">Adding YASnippets snippets</a></li><li><a href="http://cupfullofcode.com/blog/2013/02/26/snippet-expansion-with-yasnippet/index.html">Snippet expansion with YASnippet</a></li></ul><blockquote><p>Article originally published on <a href="https://jr0cket.co.uk/">jr0cket.co.uk</a> and has been migrated to <a href="https://practical.li/blog/">practical.li/blog</a></p></blockquote><p>Thank you.
+<a href="https://github.com/practicalli">practicalli GitHub profile</a> I <a href="https://twitter.com/practcial_li">@practical_li</a></p>
 </div>
 
 <div id="post-tags">
     <b>Tags: </b>
     
-    <a href="/blog-staging/tags/very%20fetch/">very fetch</a>
+    <a href="/blog-staging/tags/emacs/">emacs</a>
+    
+    <a href="/blog-staging/tags/snippets/">snippets</a>
+    
+    <a href="/blog-staging/tags/spacemacs/">spacemacs</a>
     
 </div>
 
 
     <div id="prev-next">
         
-        <a href="/blog-staging/posts/2016-01-07-docs/">&laquo; Quick Start Guide</a>
+        <a href="/blog-staging/posts/yasnippets-for-faster-clojure-development/">&laquo; YASnippets for faster clojure coding</a>
         
         
-        <a class="right" href="/blog-staging/posts/2014-03-10-first-post/">A Post &raquo;</a>
+        <a class="right" href="/blog-staging/posts/2016-01-07-docs/">Quick Start Guide &raquo;</a>
         
     </div>
 
@@ -91,8 +125,8 @@
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = "http://practical.li/blog-staging/posts/2014-11-04-second-post/";
-            this.page.identifier = "Yet Another Post";
+            this.page.url = "http://practical.li/blog-staging/posts/spacemacs-adding-your-own-yasnippets/";
+            this.page.identifier = "spacemacs - adding custom snippets to yasnippet";
         };
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

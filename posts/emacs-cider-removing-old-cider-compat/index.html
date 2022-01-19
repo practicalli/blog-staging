@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: Yet Another Post</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/posts/2014-11-04-second-post/">
+    <title>Practicalli: Emacs CIDER removing old cider-compat namespace</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/emacs-cider-removing-old-cider-compat/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -57,33 +57,44 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">November 4, 2014</div>
+        <div class="col-lg-6">January 2, 2022</div>
         
     </div>
-    <h2>Yet Another Post</h2>
+    <h2>Emacs CIDER removing old cider-compat namespace</h2>
 
     <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="/blog-staging/images/spacemacs-logo-name.png" alt="spacemacs logo" />
     
 </div>
 <div>
     
-    <h3 id="this-post-so-fetch">This Post So Fetch</h3><p>some more stuff happened</p>
+    <p>The latest snapshot of CIDER includes some welcome tidy up of the code.  One <a href="https://github.com/clojure-emacs/cider/commit/c60598fa4df6cdd3331c29b8e319cc23de1b7cc6">notable removal is <code>cider-compat</code></a> which was added to support Emacs versions previous to 25.  As most of the Emacs world is on version 27 (or 28 / 29) then there is no need to include <code>cider-compat</code> any more.</p><p>However, some Emacs packages that haven't change in a while may still used <code>cider-compat</code>, although the only one to date that has been found is <code>helm-cider</code>.  Unfortunately is causing Clojure file to fail to load when used with the latest CIDER snapshot.</p><p>When helm-cider is enabled, Emacs is unable to load Clojure files.  The error reported is:</p><pre><code>helm-cider-spec.el:27:1:Error: Cannot open load file: No such file or directory, cider-compat
+</code></pre><p>Here are a few options to work around this issue</p><blockquote><p>The maintainer of helm-cider has merged a fix already (Thank you Bozhidar) and a new package has been built by MELPA - https://melpa.org/#/helm-cider (see Build log for details)</p></blockquote><!-- more --><h2 id="hack-helm-cider-code">Hack helm-cider code</h2><p>There is only one line of code that is causing the issue, on line 27 of helm-cider-spec.el, so this can be deleted.</p><p><img src="https://raw.githubusercontent.com/practicalli/graphic-design/live/spacemacs/screenshots/emacs-helm-cider-spec-compat-line.png" alt="helm-cider cider-compat issue" /></p><p>Restarting Emacs after this removal should resolve the issue.</p><p>The helm-cider package has not been updated since 2018 (it works very well, so no reason for an update until now).  So hacking the helm-cider code should be a relatively quick and safe option</p><h2 id="fixing-helm-cider">Fixing Helm-cider</h2><p>An <a href="https://github.com/clojure-emacs/helm-cider/issues/12">issue was raised on the helm-cider repository</a> describing the issue.</p><p>It would seem that cider-compat namespace is not actually used by helm-cider-spec.el namespace, so the fix would be to remove the <code>(reqiure 'cider-compat)</code> line.</p><p><code>cider-compat</code> provides macros to define <code>if-let*</code> and <code>when-let*</code> if they are not already present.  The helm-cider-spec namespace does not actually call either of these with the current code, so its superfluous anyway.</p><p>A <a href="https://github.com/clojure-emacs/helm-cider/pull/13">pull request has been raised to delete the require</a>.  Hopefully the maintainer is able to push out a new version of the package.</p><h2 id="pinning-cider-package">Pinning CIDER package</h2><p>Emacs configuations such as Spacemacs and Doom tend to use the latest snapshot available for a package.  In this case you could either use a backup of a version of CIDER from before 29th December, or pin an earlier version.</p><h4 id="pinning-a-package-in-spacemacs">Pinning a package in Spacemacs</h4><p>Pin CIDER to an earlier version by adding the following recipe to <code>dotspacemacs/additional-packages</code></p><pre><code class="elisp">(cider :location
+   (recipe :fetcher github
+           :repo "clojure-emacs/cider"
+           :commit "ae376429a8cf22b82a9e18ff844bdfbe5fc7ecc1"))
+</code></pre><p>Delete the packages <code>cider-*</code>, <code>clojure-mode-*</code> and <code>cider-eval-sexp-fu-*</code> from <code>~/.emacs.d/elpa/&lt;emacs-version&gt;/develop/</code></p><p>Comment out <code>cider</code> or <code>(cider ,,,)</code> from the <code>dotspacemacs-configuration-layers</code> (as that will automatically download the latest version)</p><p>Restart and the pinned version of Cider will be installed.</p><p>If you have clojure variables set in the layer list, then you can uncomment them and restart for those to take effect (this will not update the package, that will only be done if using <code>SPC f e U</code> )</p><h4 id="pinning-a-package-in-doom">Pinning a package in Doom</h4><p>All of Doom's packages are pinned by default. A pinned package is a package locked to a specific commit. So to pin CIDER to a version is of the form:</p><pre><code class="elisp">(package! cider :pin "ae376429a8")
+</code></pre><blockquote><p>Practicalli has only dabbled with Doom, so this hasn't been tested yet.  Please let me know if this needs altering.</p></blockquote><h2 id="summary">Summary</h2><p>Using snapshot features does provide early access to improvements in packages and an opportunity to provide feedback to the maintainers.  However, there is a small risk of having to manage an occasional issue such as this.</p><p>It is recommended that packages are only updated when you have spare capacity to resolve possible issues and do not have any time sensitive work to be done.</p><p>Most issues are fixed pretty quickly or at least have a work-around.</p><p>Thank you
+<a href="https://practical.li/">Practicalli</a></p>
 </div>
 
 <div id="post-tags">
     <b>Tags: </b>
     
-    <a href="/blog-staging/tags/very%20fetch/">very fetch</a>
+    <a href="/blog-staging/tags/cider/">cider</a>
+    
+    <a href="/blog-staging/tags/spacemacs/">spacemacs</a>
+    
+    <a href="/blog-staging/tags/packages/">packages</a>
     
 </div>
 
 
     <div id="prev-next">
         
-        <a href="/blog-staging/posts/2016-01-07-docs/">&laquo; Quick Start Guide</a>
         
-        
-        <a class="right" href="/blog-staging/posts/2014-03-10-first-post/">A Post &raquo;</a>
+        <a class="right" href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI tools - which execution option to use &raquo;</a>
         
     </div>
 
@@ -91,8 +102,8 @@
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = "http://practical.li/blog-staging/posts/2014-11-04-second-post/";
-            this.page.identifier = "Yet Another Post";
+            this.page.url = "http://practical.li/blog-staging/posts/emacs-cider-removing-old-cider-compat/";
+            this.page.identifier = "Emacs CIDER removing old cider-compat namespace";
         };
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
