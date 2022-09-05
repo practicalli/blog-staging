@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Practicalli: Building Emacs 28 on Ubuntu Linux</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/build-emacs-28-on-ubuntu/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog-staging/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/blog-staging/">
+              <img src="/blog-staging//images/practicalli-logo-name.png" alt="Practicalli logo" />
+            </a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog-staging/">Home</a></li>
+                <li
+                ><a href="/blog-staging/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog-staging/pages/about/">About</a>
+                </li>
+                
+                <li><a href="/blog-staging/feed.xml">RSS</a></li>
+                <li><a href="https://github.com/practicalli/blog-content/projects/1">Feedback</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">May 16, 2022</div>
+        
+    </div>
+    <h2>Building Emacs 28 on Ubuntu Linux</h2>
+
+    <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/ubuntu-logo-name.png" alt="ubuntu logo - post topic" />
+    
+</div>
+<div>
+    
+    <p>Emacs 28.1 is <a href="https://www.masteringemacs.org/article/whats-new-in-emacs-28-1" title="What is new in Emacs 28.1">a feature packed release</a> and includes native compilation to significantly increase the speed of all Emacs software packages installed.  This is a very noticable difference, especially when Emacs is at the center of your developer workflow.</p><p>Ubuntu hasn't packaged Emacs 28.1 yet, although its <em>usually</em> straight forward to build Emacs yourself.</p><!-- more --><h2 id="a-very-brief-summary">A very brief summary:</h2><pre><code>sudo apt build-dep emacs &amp;&amp; /
+sudo apt install libgccjit0 libgccjit-10-dev libjansson4 libjansson-dev gnutls-bin
+</code></pre><p><a href="https://www.gnu.org/software/emacs/download.html">Download Emacs 28 source code</a> and open a terminal in the root of the extracted <em>emacs28-1</em> directory</p><pre><code>export CC=/usr/bin/gcc-10  &amp;&amp; export CXX=/usr/bin/gcc-10 &amp;&amp; ./autogen.sh &amp;&amp; ./configure --with-native-compilation &amp;&amp; /
+make -j$(proc)  &amp;&amp; /
+sudo make install
+</code></pre><p>Read the rest of the article for a more detailed description</p><h2 id="prepare-ubuntu">Prepare Ubuntu</h2><p>Open <code>Software &amp; Updates</code> and ensure the Source Code source is enabled and reload the package list (or run <code>sudo apt update</code> in a terminal after adding Source Code)</p><p><img src="https://raw.githubusercontent.com/practicalli/graphic-design/live/ubuntu/screenshots/ubuntu-sofware-updates-download-from-source-code.png" alt="Ubuntu Sofware &amp; Updates - Download from Source Code" /></p><p>Ask Ubuntu to install the packages required to build Emacs (there will be quite a few packages if this is the first software built with GCC on the operating system)</p><pre><code class="shell">sudo apt build-dep -y emacs
+</code></pre><blockquote><p>The previous approach was to use <code>sudo apt-get install build-essential gcc git-core</code>. Using build-deps manages the set of packages required as Emacs evolves.</p></blockquote><p>Install some additional libraries to support the newest features of Emacs, native compilation of Emacs packages (<code>libgccjit</code>) and fast JSON processing (<code>libjansson</code>).  These really boost performance, so are important to add.</p><pre><code class="shell">sudo apt install libgccjit0 libgccjit-10-dev libjansson4 libjansson-dev
+</code></pre><blockquote><p>On Ubuntu 20.04 <code>sudo apt-get install gnutls-bin</code>  removes a potential issue from an older certificates library</p></blockquote><h2 id="preparing-emacs-source-code">Preparing Emacs source code</h2><p><strong><a href="https://www.gnu.org/software/emacs/download.html">Download Emacs 28.1 source from a nearby GNU mirror</a></strong>, either tar.gz or tar.xz</p><p>Extract the source code using nautilus, file-roller or in a terminal with the command <code>tar zvxf emacs-28.1.tar.xz</code></p><p>In a terminal window, change into the <strong>emacs28.1</strong> directory</p><pre><code>cd emacs28-1
+</code></pre><p>Set <code>CC</code> and <code>CXX</code> environment variables to inform the Emacs configuration script as to the location of gcc-10, otherwise it fails to find libgccjit</p><pre><code>export CC=/usr/bin/gcc-10 &amp;&amp; export CXX=/usr/bin/gcc-10
+</code></pre><blockquote><p>If CC and CXX environment variables are not set, the configure script will not find important libraries and report errors such as: <code>configure: error: ELisp native compiler was requested, but libgccjit was not found.</code></p></blockquote><p>Run the autogen script to create a configure script specific to your operating system.</p><pre><code>./autogen.sh
+</code></pre><p>Run the configuration script with the native compilation flag.  This script will check the operating system for tools and libraries needed to build Emacs on your operating system.</p><pre><code>./configure --with-native-compilation
+</code></pre><p>Check the output of <code>./configure</code> was successful, see the end of this article for an example.  Ignore warnings about movemail if not using Emacs for local email management.</p><blockquote><p><code>./configure --help</code> lists available flags. Generally features are enabled if the required libraries are installed on the operating system.
+A noticeable exception is native compilation, as its a relatively new feature and not enabled by default.</p></blockquote><h2 id="building-emacs-locally">Building Emacs locally</h2><p>Build Emacs using all the CPU's of your computer.  <code>-j</code> flag specifies the number of CPU's to use, <code>nproc</code> command returns the total number of CPU's for the computer (real and virtual cores combined).</p><pre><code>make -j$(nproc)
+</code></pre><p>Run Emacs using the <code>-Q</code> option to check Emacs runs without using a users configuration file (e.g. without loading an `~/.emacs.d/ configuration)</p><pre><code>./src/emacs -Q
+</code></pre><p><code>C-x C-c</code> to quit Emacs.</p><p>If Emacs runs then it is ready to install.</p><h2 id="install-emacs-system-wide">Install Emacs system wide</h2><p>Install <code>emacs</code> and <code>emacsclient</code> to <code>/usr/local/bin</code> along with supporting libraries and man pages using the Makefile</p><pre><code>sudo make install
+</code></pre><p>To install in a different location, pass the full path using the <code>--prefix</code> option to make, e.g <code>make install --prefix /opt/emacs</code></p><h2 id="running-emacs">Running Emacs</h2><p>If the default <code>/usr/local</code> path was used to install Emacs, then the <code>emacs</code> and <code>emacsclient</code> binary files are already on the executable path</p><p>In a terminal, run the emacs command</p><pre><code>emacs
+</code></pre><p>If using Emacs 28 with Spacemacs for the first time, all Spacemacs packages in your configuration will be downloaded and compiled.  This may take 5-15 minutes and Emacs may make full use of your CPU (spawning several emacs processes on multi-core computers)</p><p>Leave Emacs for a few minutes running until the CPU activity has subsided and then consider restarting Emacs to ensure the packages have been loaded in the correct order.</p><blockquote><p>Expect to see lots of warning messages when installing more than 250 emacs packages.  Ignore these warnings until all packages have been installed.  If warnings still occur after restarting Emacs, then start investigating (or ask questions on #spacemacs channel in the Clojurians Slack community)</p></blockquote><h2 id="removing-emacs">Removing Emacs</h2><p>In the Emacs source code directory where Emacs was built, use the Makefile to remove the Emacs binaries, libraries and man pages.</p><pre><code>sudo make uninstall
+</code></pre><h2 id="emacs-build-configure-output">Emacs build configure output</h2><p>Typical output of  <code>./configure --with-native-compilation</code></p><p>Almost all configuration options should be yes, although there are a few legacy libraries or settings for other OSs that should be no.</p><pre><code>Configured for 'x86_64-pc-linux-gnu'.
+
+  Where should the build process find the source code?    .
+  What compiler should emacs be built with?               /usr/bin/gcc-10 -g3 -O2
+  Should Emacs use the GNU version of malloc?             no
+    (The GNU allocators don't work with this system configuration.)
+  Should Emacs use a relocating allocator for buffers?    no   (use operating system allocator)
+  Should Emacs use mmap(2) for buffer allocation?         no  (use operating system mmap)
+  What window system should Emacs use?                    x11
+  What toolkit should Emacs use?                          GTK3
+  Where do we find X Windows header files?                Standard dirs
+  Where do we find X Windows libraries?                   Standard dirs
+  Does Emacs use -lXaw3d?                                 no  (superseded by gtk)
+  Does Emacs use -lXpm?                                   yes
+  Does Emacs use -ljpeg?                                  yes
+  Does Emacs use -ltiff?                                  yes
+  Does Emacs use a gif library?                           yes -lgif
+  Does Emacs use a png library?                           yes -lpng16 -lz
+  Does Emacs use -lrsvg-2?                                yes
+  Does Emacs use cairo?                                   yes
+  Does Emacs use -llcms2?                                 yes
+  Does Emacs use imagemagick?                             no  (deprecated Emacs 27.1 - security issues)
+  Does Emacs use native APIs for images?                  no  (only for MS-Windows)
+  Does Emacs support sound?                               yes
+  Does Emacs use -lgpm?                                   yes
+  Does Emacs use -ldbus?                                  yes
+  Does Emacs use -lgconf?                                 no
+  Does Emacs use GSettings?                               yes
+  Does Emacs use a file notification library?             yes -lglibc (inotify)
+  Does Emacs use access control lists?                    yes -lacl
+  Does Emacs use -lselinux?                               yes
+  Does Emacs use -lgnutls?                                yes
+  Does Emacs use -lxml2?                                  yes
+  Does Emacs use -lfreetype?                              yes
+  Does Emacs use HarfBuzz?                                yes
+  Does Emacs use -lm17n-flt?                              yes
+  Does Emacs use -lotf?                                   yes
+  Does Emacs use -lxft?                                   no
+  Does Emacs use -lsystemd?                               yes
+  Does Emacs use -ljansson?                               yes
+  Does Emacs use the GMP library?                         yes
+  Does Emacs directly use zlib?                           yes
+  Does Emacs have dynamic modules support?                yes
+  Does Emacs use toolkit scroll bars?                     yes
+  Does Emacs support Xwidgets?                            no  (deprecated)
+  Does Emacs have threading support in lisp?              yes
+  Does Emacs support the portable dumper?                 yes
+  Does Emacs support legacy unexec dumping?               no
+  Which dumping strategy does Emacs use?                  pdumper
+  Does Emacs have native lisp compiler?                   yes
+</code></pre><h2 id="references">References</h2><ul><li><a href="https://www.masteringemacs.org/article/whats-new-in-emacs-28-1">Emacs 28.1 whats new</a> - a very detailed description of new features in Emacs 28.1</li><li><a href="https://www.emacswiki.org/emacs/BuildingEmacs">Emacs Wiki - Building Emacs</a> - base instructions for building Emacs</li><li><a href="https://launchpad.net/~ubuntu-elisp/+archive/ubuntu/ppa">Ubuntu Emacs LISP team PPA</a> - nightly builds from the latest Emacs commits</li></ul>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog-staging/tags/ubuntu/">ubuntu</a>
+    
+    <a href="/blog-staging/tags/emacs/">emacs</a>
+    
+    <a href="/blog-staging/tags/spacemacs/">spacemacs</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">&laquo; Adopting FreeDesktop.org XDG standard for development tools</a>
+        
+        
+        <a class="right" href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022 &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://practical.li/blog-staging/posts/build-emacs-28-on-ubuntu/";
+            this.page.identifier = "Building Emacs 28 on Ubuntu Linux";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//practicalli-blog.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://practical.li/">Practicalli Home</a></li>
+                    <li><a href="http://yt.vu/+practicalli">YouTube channel</a></li>
+                    <li><a href="https://github.com/practicalli/blog-content/projects/1">Feeback / Issues</a></li>
+                    
+                    <li><a href="/blog-staging/pages/contributing/">Contributing</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
+                        
+                        <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
+                        
+                        <li><a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a></li>
+                        
+                        <li><a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Java 17 JDK for Clojure development</a></li>
+                        
+                        <li><a href="/blog-staging/posts/code-snippets-for-clojure-lsp/">Code Snippets for Clojure LSP</a></li>
+                        
+                        <li><a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Emacs CIDER removing old cider-compat namespace</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI - which execution option to use</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojure-cli-tools-understanding-aliases/">Clojure CLI tools - understanding aliases</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/tags/json/">json</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ring/">ring</a></li>
+                        
+                        <li><a href="/blog-staging/tags/very%20fetch/">very fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ubuntu/">ubuntu</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lsp/">lsp</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cryogen/">cryogen</a></li>
+                        
+                        <li><a href="/blog-staging/tags/practicalli/">practicalli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/neovim/">neovim</a></li>
+                        
+                        <li><a href="/blog-staging/tags/aliases/">aliases</a></li>
+                        
+                        <li><a href="/blog-staging/tags/challenges/">challenges</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github/">github</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure/">clojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/httpkit/">httpkit</a></li>
+                        
+                        <li><a href="/blog-staging/tags/webapps/">webapps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-cli/">clojure-cli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/pull-requests/">pull-requests</a></li>
+                        
+                        <li><a href="/blog-staging/tags/editors/">editors</a></li>
+                        
+                        <li><a href="/blog-staging/tags/java/">java</a></li>
+                        
+                        <li><a href="/blog-staging/tags/tools-deps/">tools-deps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/hardware/">hardware</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cider/">cider</a></li>
+                        
+                        <li><a href="/blog-staging/tags/emacs/">emacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clj-http/">clj-http</a></li>
+                        
+                        <li><a href="/blog-staging/tags/calva/">calva</a></li>
+                        
+                        <li><a href="/blog-staging/tags/snippets/">snippets</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-lsp/">clojure-lsp</a></li>
+                        
+                        <li><a href="/blog-staging/tags/thinkpad/">thinkpad</a></li>
+                        
+                        <li><a href="/blog-staging/tags/events/">events</a></li>
+                        
+                        <li><a href="/blog-staging/tags/community/">community</a></li>
+                        
+                        <li><a href="/blog-staging/tags/advent-of-parens/">advent-of-parens</a></li>
+                        
+                        <li><a href="/blog-staging/tags/spacemacs/">spacemacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/help/">help</a></li>
+                        
+                        <li><a href="/blog-staging/tags/transducers/">transducers</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lenovo/">lenovo</a></li>
+                        
+                        <li><a href="/blog-staging/tags/reduce/">reduce</a></li>
+                        
+                        <li><a href="/blog-staging/tags/compojure/">compojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/klipse/">klipse</a></li>
+                        
+                        <li><a href="/blog-staging/tags/figwheel-main/">figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/tags/not%20fetch/">not fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-core/">clojure-core</a></li>
+                        
+                        <li><a href="/blog-staging/tags/web-scraper/">web-scraper</a></li>
+                        
+                        <li><a href="/blog-staging/tags/blogging/">blogging</a></li>
+                        
+                        <li><a href="/blog-staging/tags/conjure/">conjure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github-actions/">github-actions</a></li>
+                        
+                        <li><a href="/blog-staging/tags/apis/">apis</a></li>
+                        
+                        <li><a href="/blog-staging/tags/jvm/">jvm</a></li>
+                        
+                        <li><a href="/blog-staging/tags/static-sites/">static-sites</a></li>
+                        
+                        <li><a href="/blog-staging/tags/re-clojure/">re-clojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/packages/">packages</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>
+      Copyright &copy; 2022 Practicalli
+      <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p>
+
+      <license id="license">
+        <div>
+          <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution 4.0 ShareAlike License</a>, including custom images & stylesheets.</p>
+          <p>Permissions beyond the scope of this license may be available by contacting <a xmlns:cc="http://creativecommons.org/ns#" href="https://twitter.com/practical_li" rel="cc:morePermissions">@practical_li</a></p>
+          <br>
+          <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+      </license>
+
+    </footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog-staging/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

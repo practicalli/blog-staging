@@ -58,6 +58,57 @@
     
     <div class="post-header">
         <h2>
+            <a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">August 4, 2022</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-cli-logo-name.png" alt="clojure-cli logo" />
+        
+    </div>
+    <p>A walk-through of development, test and deploy workflows starting with a new ClojureScript project, using Figwheel build tool and Rebel rich terminal UI and Clojure CLI.</p><p>The <a href="https://github.com/bhauman/figwheel-main-template">figwheel-main template</a> creates a project with Clojure CLI configuration, providing example code and build configurations for development, testing and deployment workflows.</p><blockquote><p>Updated from an article first written in 2019 and originally covered in <a href="https://youtu.be/uuxEYsX-1eg">Practicalli Clojure study group #38 video</a></p></blockquote>
+    <a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
+            <a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">May 16, 2022</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/ubuntu-logo-name.png" alt="ubuntu logo" />
+        
+    </div>
+    <p>Managing your personal configuration for development tools and applications is much more effective when adopting the <a href="https://www.freedesktop.org/wiki/Specifications/basedir-spec/">XDG basedir standard</a>, which defines separate locations to store user configurations, data files and caches.</p><p>Without the XDG standard, these files and directories are often mixed together and stored in the <code>$HOME</code>  of the users account, making it more challenging to backup or version control.</p><p>Development tools such as NeoVim, Emacs, Clojure CLI  and Clojure LSP support the XDG specification, although some tools like Leiningen required a little help.  There are simple approaches to work-around the limitations of tools that don't conform.</p>
+    <a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
+            <a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">May 16, 2022</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/ubuntu-logo-name.png" alt="ubuntu logo" />
+        
+    </div>
+    <p>Emacs 28.1 is <a href="https://www.masteringemacs.org/article/whats-new-in-emacs-28-1" title="What is new in Emacs 28.1">a feature packed release</a> and includes native compilation to significantly increase the speed of all Emacs software packages installed.  This is a very noticable difference, especially when Emacs is at the center of your developer workflow.</p><p>Ubuntu hasn't packaged Emacs 28.1 yet, although its <em>usually</em> straight forward to build Emacs yourself.</p><!-- more -->
+    <a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
             <a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a>
         </h2>
         <div id="post-meta">
@@ -90,57 +141,6 @@
     <a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/code-snippets-for-clojure-lsp/">Code Snippets for Clojure LSP</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">January 28, 2022</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-logo-name.png" alt="clojure logo" />
-        
-    </div>
-    <p><a href="https://clojure-lsp.io/features/#snippets">Clojure LSP snippets</a> are an editor agnostic approach to expanding common code forms from snippet names, saving typing and acting as a guide to the syntax of a Clojure form.  Practicalli also uses snippets for rich comments, documentation and highlighting logical sections of code in a namespace.</p><p>Clojure LSP snippets are defined using the EDN syntax and have the same tab stop syntax as <a href="/blog-staging/posts/yasnippets-for-faster-clojure-development/">Yasnippets</a> and other snippet tools.</p><blockquote><p><a href="https://practical.li/spacemacs/snippets/clojure-lsp/">Clojure LSP snippets are covered in Practiclli Spacemacs</a>, including a large number of examples of custom snippets</p></blockquote>
-    <a href="/blog-staging/posts/code-snippets-for-clojure-lsp/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Emacs CIDER removing old cider-compat namespace</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">January 2, 2022</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/spacemacs-logo-name.png" alt="spacemacs logo" />
-        
-    </div>
-    <p>The latest snapshot of CIDER includes some welcome tidy up of the code.  One <a href="https://github.com/clojure-emacs/cider/commit/c60598fa4df6cdd3331c29b8e319cc23de1b7cc6">notable removal is <code>cider-compat</code></a> which was added to support Emacs versions previous to 25.  As most of the Emacs world is on version 27 (or 28 / 29) then there is no need to include <code>cider-compat</code> any more.</p><p>However, some Emacs packages that haven't change in a while may still used <code>cider-compat</code>, although the only one to date that has been found is <code>helm-cider</code>.  Unfortunately is causing Clojure file to fail to load when used with the latest CIDER snapshot.</p><p>When helm-cider is enabled, Emacs is unable to load Clojure files.  The error reported is:</p>
-    <a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI tools - which execution option to use</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">December 24, 2021</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-cli-logo-name.png" alt="clojure-cli logo" />
-        
-    </div>
-    <p>Clojure CLI tools provide a very flexible way to run Clojure, using aliases to include community libraries and tools to enhance clojure projects and provide independent tools. Understand the execution options (exec-opts) on the command line options ensures an effective use of Clojure CLI tools.</p><blockquote><p>Updated on 24th December 2021 with feedback from Alex, Sean and other community members.  Thank you.</p></blockquote><p>Clojure CLI tools <a href="https://clojure.org/releases/tools#v1.10.1.510">first documented released in February 2020</a> with a specific focus on running Clojure code quickly and easily, which also required the management of dependencies from Maven, Git and a local file space.</p>
-    <a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -169,6 +169,12 @@
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
+                        
+                        <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
+                        
                         <li><a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a></li>
                         
                         <li><a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Java 17 JDK for Clojure development</a></li>
@@ -177,15 +183,9 @@
                         
                         <li><a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Emacs CIDER removing old cider-compat namespace</a></li>
                         
-                        <li><a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI tools - which execution option to use</a></li>
+                        <li><a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI - which execution option to use</a></li>
                         
                         <li><a href="/blog-staging/posts/clojure-cli-tools-understanding-aliases/">Clojure CLI tools - understanding aliases</a></li>
-                        
-                        <li><a href="/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/">Automate Cryogen Clojure blog with GitHub Actions</a></li>
-                        
-                        <li><a href="/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/">Overview of Language Server Protocol LSP for Clojure development</a></li>
-                        
-                        <li><a href="/blog-staging/posts/brave-clojure-redux-part01-the-repl/">Brave Clojure redux - part 1 - the REPL</a></li>
                         
                     </ul>
                 </div>
@@ -208,6 +208,8 @@
                         <li><a href="/blog-staging/tags/cryogen/">cryogen</a></li>
                         
                         <li><a href="/blog-staging/tags/practicalli/">practicalli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/neovim/">neovim</a></li>
                         
                         <li><a href="/blog-staging/tags/aliases/">aliases</a></li>
                         
