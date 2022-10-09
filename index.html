@@ -58,6 +58,23 @@
     
     <div class="post-header">
         <h2>
+            <a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Running Clojure code with Java and JVM Options</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">October 2, 2022</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/java-logo-name.png" alt="java logo" />
+        
+    </div>
+    <p>Clojure in production is typically run using the <code>java</code> command, as this simplifies the tooling requirements for deployment to the Java Virtual Machine and supporting tools, packaged up in the Java Run-time Environment (JRE).</p><p>Clojure code may also benefit from setting options to alter the default behaviour of the Java Virtual Machine (JVM), especially when running in a constrained environment or performance issues have been detected.</p><p><code>JDK_JAVA_OPTIONS</code> is the official Environment Variable for setting options when running a Java Virtual Machine (Java version 9 onward). <code>JDK_JAVA_OPTIONS</code> should be used by deployment systems to inject JVM options into container run-time environments.</p>
+    <a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
             <a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a>
         </h2>
         <div id="post-meta">
@@ -124,23 +141,6 @@
     <a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Java 17 JDK for Clojure development</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">January 31, 2022</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/java-logo-name.png" alt="java logo" />
-        
-    </div>
-    <p>Java JDK 17 is the latest Long Term Support version and ideally should be the default JVM for developing and deploying new Clojure projects (and existing projects after testing). There should be little risk upgrading, especially from Java 11 onward.  The 17.0.2 version has just been release, so has been tested by many development teams already.</p><p>Although the language features are of less interest, the security and performance improvements over the last 3 years (since Java 11) or 6 years (since Java 8) are valuable to Clojure development.</p><p><a href="https://www.infoq.com/news/2021/10/oracle-jdk-free-again/">Oracle JDK 17 is free again</a> for use in production and to redistribute, under the No-Fee Terms and Conditions License.  However, Practicalli recommends using OpenJDK anyway.</p>
-    <a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -169,6 +169,8 @@
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Running Clojure code with Java and JVM Options</a></li>
+                        
                         <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
                         
                         <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
@@ -184,8 +186,6 @@
                         <li><a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Emacs CIDER removing old cider-compat namespace</a></li>
                         
                         <li><a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI - which execution option to use</a></li>
-                        
-                        <li><a href="/blog-staging/posts/clojure-cli-tools-understanding-aliases/">Clojure CLI tools - understanding aliases</a></li>
                         
                     </ul>
                 </div>
@@ -216,6 +216,8 @@
                         <li><a href="/blog-staging/tags/challenges/">challenges</a></li>
                         
                         <li><a href="/blog-staging/tags/github/">github</a></li>
+                        
+                        <li><a href="/blog-staging/tags/jdk_java_options/">jdk_java_options</a></li>
                         
                         <li><a href="/blog-staging/tags/clojure/">clojure</a></li>
                         

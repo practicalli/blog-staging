@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Practicalli: Running Clojure code with Java and JVM Options</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog-staging/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/blog-staging/">
+              <img src="/blog-staging//images/practicalli-logo-name.png" alt="Practicalli logo" />
+            </a>
+        </div>
+
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog-staging/">Home</a></li>
+                <li
+                ><a href="/blog-staging/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog-staging/pages/about/">About</a>
+                </li>
+                
+                <li><a href="/blog-staging/feed.xml">RSS</a></li>
+                <li><a href="https://github.com/practicalli/blog-content/projects/1">Feedback</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">October 2, 2022</div>
+        
+    </div>
+    <h2>Running Clojure code with Java and JVM Options</h2>
+
+    <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/java-logo-name.png" alt="java logo - post topic" />
+    
+</div>
+<div>
+    
+    <p>Clojure in production is typically run using the <code>java</code> command, as this simplifies the tooling requirements for deployment to the Java Virtual Machine and supporting tools, packaged up in the Java Run-time Environment (JRE).</p><p>Clojure code may also benefit from setting options to alter the default behaviour of the Java Virtual Machine (JVM), especially when running in a constrained environment or performance issues have been detected.</p><p><code>JDK_JAVA_OPTIONS</code> is the official Environment Variable for setting options when running a Java Virtual Machine (Java version 9 onward). <code>JDK_JAVA_OPTIONS</code> should be used by deployment systems to inject JVM options into container run-time environments.</p><blockquote><p>Clojure CLI and Leiningen can also be passed JVM options during development or if running services via those tools rather than <code>java</code> (mostly for edge cases).</p></blockquote><h2 id="using-the-java-command-to-run-clojure">Using the java command to run Clojure</h2><p>Clojure code needs to have the standard Clojure libraries on the class path to run inside the Java Virtual Machine.  The  <code>org.clojure/clojure</code> library provides <code>clojure.main</code> to execute the Clojure code, <code>org.clojure/core.specs.alpha</code> and <code>org.clojure/spec.alpha</code> are supporting libraries required as a minimum. These libraries are included when creating an uberjar of a Clojure project.</p><blockquote><p><a href="https://www.clojure.org/reference/repl_and_main"><code>clojure.main</code></a> namespace provides functions to run Clojure programs and REPL sessions via the java command</p></blockquote><p>During development the Clojure library is added to the Java class path by the development tooling, e.g. Clojure CLI or Leinignen.</p><p>The <code>java</code> command uses an uberjar created from the Clojure project to provide the necessary Clojure libraries on the class path.</p><p>The first non-option argument in the <code>java</code> command is the fully qualified name of the class to be called, which for running Clojure code should be <code>clojure.main</code>.</p><p>The <code>-m namespace.name</code> arguments are passed to <code>clojure.main</code> to define the Clojure namespace that contains the entry point to the Clojure code, e.g. <code>-m practicalli.game-board</code>.</p><p>Further arguments are passed to the <code>-main</code> function in the <code>practicalli.game-board</code> namespace as arguments to that function, e.g. <code>$PORT</code>.</p><pre><code class="bash">java --class-path game-board.jar clojure.main -m practicalli.game-board $PORT`
+</code></pre><blockquote><p>The first argument that isn't an option of the <code>java</code> command .</p></blockquote><p>The <code>-jar</code> option is used rather than <code>--class-path</code>, as it simplifies the command whilst still carrying out the same work.  The <code>.jar</code> file should contain a <code>/META-INF/MANIFEST.MF</code> file that defines the Java Class that represents the Clojure namespace which contains the entry point function to the code, e.g. <code>Main-Class: practicalli.game_board</code>  Note that the name uses snake_case rather than kebab-case as this is a value read by Java rather than Clojure.</p><pre><code class="bash">java -jar game-board-0.1.0-SNAPSHOT.jar $PORT
+</code></pre><blockquote><p><code>-jar jarfile</code> option executes code encapsulated in a JAR file and ignores other <code>--class-path</code> settings.</p></blockquote><h2 id="configure-a-clojure-service-to-run-via-java">Configure a Clojure service to run via java</h2><p>l
+The main namespace should include a <code>:gen-class</code> directive in the <code>ns</code> definition.  A <code>-main</code> function is called from that namespace, passing in arguments from the command line, so it is recommended to have a variable arity <code>[&amp; arguments]</code> in the <code>-main</code> function definition.</p><pre><code class="clojure">(ns practicalli.game-board.service
+  (:gen-class))
+
+(defn -main [&amp; arguments]
+  ;; code to start service
+  )
+</code></pre><p>Build tools such as <a href="https://www.clojure.org/guides/tools_build">Clojure tools.build</a> or <a href="https://github.com/tonsky/uberdeps">tonsky/uberdeps</a> should be used to generate a well-formed Uberjar that contains the Clojure libraries and standard configuration files.</p><h2 id="jvm-options---show-settings">JVM Options - show settings</h2><p><code>-XshowSettings:system</code> is an option to print information about the VM &amp; Operating System settings, properties and locales.  Details of the Java environment is printed at the end.</p><p>Show the baseline settings by calling java -version with the <code>-XshowSettings</code> option</p><pre><code>java -XshowSettings -version
+</code></pre><p>Settings are divided into categories so only specific parts of the settings can be printed out.</p><ul><li><code>-XshowSettings:system</code> - operating system metrics (provider, CPU count, Memory &amp; Swap limits), useful diagnostics when running in a container environment</li><li><code>-XshowSettings:vm</code> - show heap size and VM used</li><li><code>-XshowSettings:properties</code></li><li><code>-XshowSettings:locale</code> locale settings (default and available locations)</li></ul><p><code>-XshowSettings:system</code> is especially useful diagnostic when running in a container environment as it will help diagnose if the resources available from the container have changed.</p><h2 id="using-options-with-a-clojure-service">Using options with a Clojure service</h2><p>JVM options can of course be included as arguments to the <code>java</code> command, although this makes the command more involved and potentially harder to read and find in a process listing (especially if there are multiple java processes running)</p><pre><code class="bash">java -XshowSettings:system -jar todo-list.jar $PORT
+</code></pre><h2 id="jdk-java-options-environment-variable">JDK_JAVA_OPTIONS Environment variable</h2><p><code>JDK_JAVA_OPTIONS</code> environment variable can be used to add any of the options to the <code>java</code> command.  The value of the environment variable is automatically used by the <code>java</code> command,  prepend its value so the are used before any other arguments.</p><p>On the command line</p><pre><code class="bash">export JDK_JAVA_OPTIONS="-XshowSettings:system"
+
+java -version
+</code></pre><h2 id="simplify-options-using-jdk-java-options">Simplify options using JDK_JAVA_OPTIONS</h2><p>Set values for the <code>JDK_JAVA_OPTIONS</code> environment variable and they are automatically included when running the <code>java</code> command.</p><pre><code class="bash">export JDK_JAVA_OPTIONS="-XshowSettings:system"
+
+java -jar todo-list.jar $PORT
+</code></pre><blockquote><p><code>JAVA_OPTS</code> has often been used although should be considered deprecated unless using Java version 8 (which is past end of life so should also be considered deprecated)</p></blockquote><h2 id="java-options-for-memory-management">Java Options for Memory Management</h2><p>The original approach to memory management was to set specific values for memory resource use by the JVM.  This approach was rarely an issue for physical servers as the memory available in the host operating system was unlikely to change.</p><p>Setting the maximum heap higher than the available memory available can lead to performance degredation of the Java Virtual Machine and may also trigger monitoring systems to restart the operating system.</p><p>In container-based cloud services and similar scalable environment, memory and cpu resources available to a container are simple to change in the deployment configuration.  Memory resources should be set using relative values, i.e. the percentage of the resources available.</p><h3 id="container-memory-management">Container Memory Management</h3><p>JVM options that optomise running in a container</p><ul><li><p><code>-XX:MaxRAMPercentage</code> <code>-XX:MinRAMPercentage</code></p></li><li><p><code>-Xmx</code></p></li></ul><p>Test the <code>-XX:MaxRAMPercentage</code> option by running the official OpenJDK container (alpine version).  Set the memory allocated to the container at 1 GB. Configure the JVM with <code>-XX:MaxRAMPercentage=50</code>, then approximately 512GB (i.e., 1/2 of 1GB) will be allocated to your Java heap size.
+Java</p><pre><code class="bash">docker run -m 1GB eclipse-temurin:17-alpine java -XX:MaxRAMPercentage=50 -XshowSettings:vm -version
+</code></pre><p>The <code>-XshowSettings:vm</code> output shows the maximum heap size that will be used by the Java Virtual Machine.</p><pre><code class="bash">VM settings:
+Max. Heap Size (Estimated): 494.94M
+Using VM: OpenJDK 64-Bit Server VM
+</code></pre><ul><li><p><code>-XX:MaxRAMPercentage=90</code> to set a relative maximum percentage of heap to use, based on the memory available from the host, e.g. <code>-XX:MaxRAMPercentage=80</code> will use a heap size of 80% of the available host memory</p></li><li><p><code>-XX:+UseContainerSupport</code> instruct the JVM that it is running in a container environment, disabling the checks the JVM would otherwise carry out to determine if it was running in a container.  Can save a very small amount of start up time, though mainly used to ensure the JVM knows its in a container.</p></li></ul><blockquote><p><code>JDK_JAVA_OPTIONS</code> environment variable should be used for setting JVM options within a container or in the provisioning service (e.g. Kubernettes / Argo CD) that deploys containers.</p></blockquote><blockquote><p>‘-XX:MaxRAMPercentage’, ‘-XX: MinRAMPercentage’ JVM arguments are supported from Java 8 update 191 and above</p></blockquote><h3 id="jdk-java-options-in-docker-containers">JDK_JAVA_OPTIONS in Docker Containers</h3><p>Add and <code>ENV</code> directive to the <code>Dockerfile</code> before the <code>CMD</code> to run the Clojure service.</p><p>In this <code>Dockerfile</code> excerpt the <code>JDK_JAVA_OPTIONS</code> environment variable is used to print out the resources the JVM believes it has access to at startup. The JVM is instructed that it is running in a container environment and should use a maximum 90% heap size of the hosts memory resource.</p><pre><code class="Dockerfile"># JDK_JAVA_OPTIONS environment variable for setting JVM options
+ENV JDK_JAVA_OPTIONS "-XshowSettings:system -XX:+UseContainerSupport -XX:MaxRAMPercentage=80"
+
+# Start service (override default `jshell` entrypoint command of image)
+CMD ["java", "-jar", "game-board.jar"]
+</code></pre><h2 id="traditional-me">Traditional me</h2><p>‘-Xmx’ option to specify the maximum heap size for the JVM</p><p>okay for running on physical machines, more risky on container based infrastructure</p><p>-Xmx3200m - maximum heap memory used for head,</p><h2 id="zgc-for-low-latency-systems">ZGC for Low Latency systems</h2><p>For systems that require very low latency, use the Z Garbage collector (Java 15 onward).</p><pre><code>"-XX:+UseZGC"
+</code></pre><p>From Java 11 to Java 14 the Z Garbage Collector was available as an experimental option.</p><pre><code>"-XX:+UnlockExperimentalVMOptions -XX:+UseZGC"
+</code></pre><h2 id="deployment">Deployment</h2><p>CircleCI</p><!-- TODO: Update CircleCI config to use JDK_JAVA_OPTIONS environment variable --><pre><code>  JVM_OPTS: -Xmx3200m   # limit the maximum heap size to prevent out of memory errors
+</code></pre><pre><code>jobs:
+  build:
+    working_directory: ~/build
+    docker:
+      - image: cimg/clojure:1.10
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: status-monitor-service-{{ checksum "deps.edn" }}
+      - run: clojure -P
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/.gitlibs
+          key: status-monitor-service-{{ checksum "deps.edn" }}
+      - run: clojure -X:test/run
+</code></pre><h2 id="leiningen">Leiningen</h2><!-- TODO: assumption that jvm-opts in leinignen config is rarely used unless doing some serious Java Interop --><ul><li>Include JVM options via config</li></ul><ul><li><code>:profiles {:uberjar {:jvm-opts [""]}}</code> for options relevant to building clojure</li></ul><p>Edit the <code>project.clj</code> file and add the <code>[ring/ring "1.9.5"]</code> dependency to the top-level <code>:dependencies</code> key, which defines the libraries used to make the project.</p><pre><code class="clojure">(defproject practicalli/web-server "0.1.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
+  :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
+            :url "https://www.eclipse.org/legal/epl-2.0/"}
+  :dependencies [[org.clojure/clojure "1.11.0"]
+                 [ring/ring "1.9.5"]]
+  :main ^:skip-aot practicalli.web-server
+  :target-path "target/%s"
+  :profiles {:uberjar {:aot :all
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+
+</code></pre><p><a href="https://clojure.org/reference/deps_and_cli#_prepare_jvm_environment">Java Virtual Machine options can be passed using the Clojure CLI</a>, either via the <code>-J</code> command line flag or <code>:jvm-opts</code> in a <code>deps.edn</code> alias.</p><!-- TODO: reference: clojure CLI JVM options - common options and there use (e.g. manage heap size, garbage collection, etc.) --><blockquote><h4 id="hintjava-virtual-machine-configuration-and-reporting">Hint::Java Virtual Machine configuration and reporting</h4><p><a href="/blog-staging/reference/jvm/index.md">Java Virtual Machine section</a> covers commonly used options, reporting JVM metrics and optimisation of the JVM process.</p></blockquote><h2 id="clojure-cli-command-line-options">Clojure CLI command line options</h2><p>Clojure CLI <code>-J</code> flag passes configuration options to the JVM. When there are multiple, each must be prefixed with <code>-J</code>.</p><pre><code>clojure -J-XX:+UnlockDiagnosticVMOptions -J‑XX:NativeMemoryTracking=summary -J‑XX:+PrintNMTStatistics
+</code></pre><h2 id="clojure-cli-depsedn-configuration">Clojure CLI deps.edn configuration</h2><p><code>:jvm-opts</code> key in an alias adds JVM options to Clojure CLI deps.edn configuration.  The <code>:jvm-opts</code> key has a value that is a collection of string JVM options <code>["-Xms2048m" "-Xmx4096"]</code></p><p>Alias to set a large heap size</p><pre><code class="clojure">:jvm/heap-max-2g {:jvm-opts ["-Xmx2G"]}
+</code></pre><p>Report a full breakdown of the HotSpot JVM’s memory usage upon exit using the following option combination:</p><pre><code class="clojure">:jvm/report {:jvm-opts ["-XX:+UnlockDiagnosticVMOptions"
+                        "‑XX:NativeMemoryTracking=summary"
+                        "‑XX:+PrintNMTStatistics"]}
+</code></pre><p>Add a Java module</p><pre><code class="clojure">:jvm/xml-bind {:jvm-opts ["–add-modules java.xml.bind"]}
+</code></pre><p>Ignoring unrecognised options</p><pre><code class="clojure">:jvm-opts ["-XX:+IgnoreUnrecognizedVMOptions"]
+</code></pre><p>The aliases can be used with the Clojure CLI execution options: <code>-A</code> (for built-in REPL invocation), <code>-X</code> (for function execution), or <code>-M</code> (for clojure.main execution).</p><blockquote><p><code>-J</code> JVM options specified on the command line are concatenated after the alias options</p></blockquote><!-- ## Optimising JVM for a container --><!-- TODO: JVM options useful when running in a container, e.g. docker --><h2 id="calling-a-clojure-uberjar">Calling A Clojure Uberjar</h2><p>JVM options must be specified when calling an uberjar with the Java command, as the project <code>deps.edn</code> file is not used by Java.</p><pre><code>java -jar project-uberjar.jar -J...
+</code></pre><h2 id="clojure-related-jvm-options">Clojure related JVM options</h2><p>Specify options or system properties to set up the Clojure service</p><p><code>-Dclojure.compiler.disable-locals-clearing=true</code> - make more info available to debuggers</p><p><code>-Dclojure.main.report=stderr</code> - print stack traces to standard error instead of saving to file, useful if process failing on startup</p><p><code>-Dclojure.spec.skip-macros=false</code> - skip spec checks against macro forms</p><h3 id="memory-management">Memory Management</h3><p><code>-XX:CompressedClassSpaceSize=3G</code> - prevent a specific type of OOMs</p><p><code>-XX:MaxJavaStackTraceDepth=1000000</code> - prevents trivial Stack Overflow errors</p><p><code>-Xmx24G</code> - set high maximum heap, preventing certain types of Out Of Memory errors (ideally high memory usage should be profiled if cause not known)</p><p><code>-Xss6144k</code> - increase stack size x6 to prevent Stack Overflow errors</p><blockquote><p>The current default can be found with <code>java -XX:+PrintFlagsFinal -version 2&gt;/dev/null | grep "intx ThreadStackSize"</code></p></blockquote><p><code>-Xms6G</code> - Set minimum memory that is equal or greater than memory used by a running REPL, to improve performance</p><p><code>-Xmx1G</code> - limit maximum heap allocation so a process can never use more memory, useful for environments with limited memory resources</p><pre><code class="clojure">:jvm/mem-max1g {:jvm-opts ["-Xmx1G"]}
+</code></pre><h3 id="stack-traces">Stack traces</h3><p><code>-XX:+TieredCompilation</code> - enable tiered compilation to support accurate bench-marking (increases startup time)</p><p><code>-XX:-OmitStackTraceInFastThrow</code> - don't elide stack traces</p><h3 id="startup-options">Startup options</h3><p><code>-Xverify:none</code> option reduces startup time of the JVM by skipping verification process</p><pre><code class="bash">"-Xverify:none"
+</code></pre><blockquote><p>The verification process is a valuable check, especially for code that has not been run before.  So the code should be run through the verification process before deploying to production.</p></blockquote><h3 id="benchmark-options">Benchmark options</h3><p>Enable various optimizations, for guaranteeing accurate benchmarking (at the cost of slower startup):</p><p><code>"-server"</code></p><h3 id="graphical-ui-related-options">Graphical UI related options</h3><p><code>-Djava.awt.headless=true</code> - disable all UI features for disabling the clipboard for personal security:</p><p><code>-Dapple.awt.UIElement=true</code> - remove icon from the MacOSX Dock</p><p><code>-Dclash.dev.expound=true</code> - ?</p><h3 id="garbage-collection">Garbage Collection</h3><p>Setup GC with short STW pauses which can be relevant for very high web server workloads</p><pre><code class="clojure">:jvm/g1gc
+{:jvm-opts ["-XX:+UseG1GC"
+            "-XX:MaxGCPauseMillis=200"
+            "-XX:ParallelGCThreads=20"
+            "-XX:ConcGCThreads=5"
+            "-XX:InitiatingHeapOccupancyPercent=70"]}
+</code></pre><ul><li>Source: <a href="https://docs.oracle.com/cd/E40972_01/doc.70/e40973/cnf_jvmgc.htm#autoId2">Tuning Garbage Collection with Oracle JDK</a></li></ul><h3 id="view-jvm-options-of-a-running-jvm-process">View JVM options of a running JVM process</h3><p>Use a JMX client, e.g. <a href="https://visualvm.github.io/">VisualVM</a></p><p><code>jcmd pid VM.system_properties</code> or <code>jcmd pid VM.flags</code> using <code>jcmd -l</code> to get the pid of the JVM process</p><p>On Linux <code>ps -ef | grep java</code> which includes the options to run the JVM process, <code>ps -auxww</code> to show long arguments</p><ul><li><a href="https://stackoverflow.com/questions/5317152/getting-the-parameters-of-a-running-jvm">Getting the parameters of a running JVM</a></li></ul><h3 id="references">References</h3><ul><li><a href="https://www.jrebel.com/blog/jvm-options-cheat-sheet">JVM Options cheatsheet - JRebel</a></li><li><a href="https://docs.oracle.com/en/java/javase/17/index.html">Java 17 Standard Edition Documentation</a></li><li><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html">Java 17 - java command documentation</a></li></ul><h2 id="java-environment-variables">Java Environment variables</h2><ul><li><code>CLASSPATH</code></li><li><code>JDK_JAVA_OPTIONS</code></li><li><code>JAVA_OPTS</code> - deprecated since Java 9, use <code>JDK_JAVA_OPTIONS</code></li><li><code>JDK_TOOL_OPTIONS</code> - specifically for setting options for Java tools (not for use with the <code>java</code> command)</li></ul><h2 id="java-command-options-relevant-to-clojure">Java command options relevant to Clojure</h2><p><code>--class-path</code>, <code>-classpath</code>, or <code>-cp</code> - list of directories, JAR and ZIP archives to search for class files, separated with <code>:</code>. Overrides the <code>CLASSPATH</code> environment variable. The user class path is the current directory, <code>.</code>, when not explicitly set.  Use <code>*</code> wildcard to include all <code>.jar</code> &amp; <code>.zip</code> files in a directory.</p><p>--enable-preview
+Allows classes to depend on preview features of the release. https://docs.oracle.com/en/java/javase/12/language/index.html#JSLAN-GUID-5A82FE0E-0CA4-4F1F-B075-564874FE2823</p><blockquote><p>TODO: move to Clojure book</p></blockquote><h2 id="java-class-path-with-clojure-libraries">java class path with Clojure libraries</h2><p>The <code>java</code> command can be used tor run a Clojure service without an Uberjar of the Clojure service, so long as the  <code>org.clojure/clojure</code>, <code>org.clojure/core.specs.alpha</code> and <code>org.clojure/spec.alpha</code> libraries are included on the class path.  For example, those libraries could be copied to a <code>lib</code> directory in the route of the project.</p><pre><code class="bash">java -cp lib/clojure-1.11.1.jar:lib/core.specs.alpha-0.2.62.jar:lib/spec.alpha-0.3.218.jar:src clojure.main -m practicalli.game-board
+</code></pre><p>Rather than copy the Clojure libraries into the project, libraries could be used from the local Maven cache</p><pre><code class="bash">java -cp $HOME/.cache/maven/repository/org/clojure/clojure/1.11.1/clojure-1.11.1.jar:$HOME/.cache/maven/repository/org/clojure/core.specs.alpha/0.2.62/core.specs.alpha-0.2.62.jar:$HOME/.cache/maven/repository/org/clojure/spec.alpha/0.3.218/spec.alpha-0.3.218.jar:src clojure.main -m practicalli.game-board
+</code></pre><p><code>JDK_JAVA_OPTIONS</code> can simplify the java command by separating the common options.</p><pre><code class="bash">export JDK_JAVA_OPTIONS="-cp /home/practicalli/.cache/maven/repository/org/clojure/clojure/1.11.1/clojure-1.11.1.jar:/home/practicalli/.cache/maven/repository/org/clojure/core.specs.alpha/0.2.62/core.specs.alpha-0.2.62.jar:/home/practicalli/.cache/maven/repository/org/clojure/spec.alpha/0.3.218/spec.alpha-0.3.218.jar:src"
+</code></pre><p>The <code>java</code> command now just includes the arguments</p><pre><code class="bash">java clojure.main -m practicalli.game-board
+</code></pre><p>The output from the <code>java</code> command shows that it picked up the options</p><pre><code class="bash">NOTE: Picked up JDK_JAVA_OPTIONS: -cp /home/practicalli/.cache/maven/repository/org/clojure/clojure/1.11.1/clojure-1.11.1.jar:/home/practicalli/.cache/maven/repository/org/clojure/core.specs.alpha/0.2.62/core.specs.alpha-0.2.62.jar:/home/practicalli/.cache/maven/repository/org/clojure/spec.alpha/0.3.218/spec.alpha-0.3.218.jar:src
+Hello, World!
+</code></pre><blockquote><p>Obviously this is not an optimal approach and only for background</p></blockquote><ul><li><code>-XX:MaxRAMFraction</code> <code>-XX:MinRAMFraction</code> are only supported from only Java 8 update 131 to Java 8 update 190</li></ul>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog-staging/tags/jdk_java_options/">jdk_java_options</a>
+    
+    <a href="/blog-staging/tags/clojure/">clojure</a>
+    
+    <a href="/blog-staging/tags/java/">java</a>
+    
+    <a href="/blog-staging/tags/jvm/">jvm</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://practical.li/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/";
+            this.page.identifier = "Running Clojure code with Java and JVM Options";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//practicalli-blog.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://practical.li/">Practicalli Home</a></li>
+                    <li><a href="http://yt.vu/+practicalli">YouTube channel</a></li>
+                    <li><a href="https://github.com/practicalli/blog-content/projects/1">Feeback / Issues</a></li>
+                    
+                    <li><a href="/blog-staging/pages/contributing/">Contributing</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Running Clojure code with Java and JVM Options</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
+                        
+                        <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
+                        
+                        <li><a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a></li>
+                        
+                        <li><a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Java 17 JDK for Clojure development</a></li>
+                        
+                        <li><a href="/blog-staging/posts/code-snippets-for-clojure-lsp/">Code Snippets for Clojure LSP</a></li>
+                        
+                        <li><a href="/blog-staging/posts/emacs-cider-removing-old-cider-compat/">Emacs CIDER removing old cider-compat namespace</a></li>
+                        
+                        <li><a href="/blog-staging/posts/clojure-which-execution-option-to-use/">Clojure CLI - which execution option to use</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog-staging/tags/json/">json</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ring/">ring</a></li>
+                        
+                        <li><a href="/blog-staging/tags/very%20fetch/">very fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/ubuntu/">ubuntu</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lsp/">lsp</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cryogen/">cryogen</a></li>
+                        
+                        <li><a href="/blog-staging/tags/practicalli/">practicalli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/neovim/">neovim</a></li>
+                        
+                        <li><a href="/blog-staging/tags/aliases/">aliases</a></li>
+                        
+                        <li><a href="/blog-staging/tags/challenges/">challenges</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github/">github</a></li>
+                        
+                        <li><a href="/blog-staging/tags/jdk_java_options/">jdk_java_options</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure/">clojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/httpkit/">httpkit</a></li>
+                        
+                        <li><a href="/blog-staging/tags/webapps/">webapps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-cli/">clojure-cli</a></li>
+                        
+                        <li><a href="/blog-staging/tags/pull-requests/">pull-requests</a></li>
+                        
+                        <li><a href="/blog-staging/tags/editors/">editors</a></li>
+                        
+                        <li><a href="/blog-staging/tags/java/">java</a></li>
+                        
+                        <li><a href="/blog-staging/tags/tools-deps/">tools-deps</a></li>
+                        
+                        <li><a href="/blog-staging/tags/hardware/">hardware</a></li>
+                        
+                        <li><a href="/blog-staging/tags/cider/">cider</a></li>
+                        
+                        <li><a href="/blog-staging/tags/emacs/">emacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clj-http/">clj-http</a></li>
+                        
+                        <li><a href="/blog-staging/tags/calva/">calva</a></li>
+                        
+                        <li><a href="/blog-staging/tags/snippets/">snippets</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-lsp/">clojure-lsp</a></li>
+                        
+                        <li><a href="/blog-staging/tags/thinkpad/">thinkpad</a></li>
+                        
+                        <li><a href="/blog-staging/tags/events/">events</a></li>
+                        
+                        <li><a href="/blog-staging/tags/community/">community</a></li>
+                        
+                        <li><a href="/blog-staging/tags/advent-of-parens/">advent-of-parens</a></li>
+                        
+                        <li><a href="/blog-staging/tags/spacemacs/">spacemacs</a></li>
+                        
+                        <li><a href="/blog-staging/tags/help/">help</a></li>
+                        
+                        <li><a href="/blog-staging/tags/transducers/">transducers</a></li>
+                        
+                        <li><a href="/blog-staging/tags/lenovo/">lenovo</a></li>
+                        
+                        <li><a href="/blog-staging/tags/reduce/">reduce</a></li>
+                        
+                        <li><a href="/blog-staging/tags/compojure/">compojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/klipse/">klipse</a></li>
+                        
+                        <li><a href="/blog-staging/tags/figwheel-main/">figwheel-main</a></li>
+                        
+                        <li><a href="/blog-staging/tags/not%20fetch/">not fetch</a></li>
+                        
+                        <li><a href="/blog-staging/tags/clojure-core/">clojure-core</a></li>
+                        
+                        <li><a href="/blog-staging/tags/web-scraper/">web-scraper</a></li>
+                        
+                        <li><a href="/blog-staging/tags/blogging/">blogging</a></li>
+                        
+                        <li><a href="/blog-staging/tags/conjure/">conjure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/github-actions/">github-actions</a></li>
+                        
+                        <li><a href="/blog-staging/tags/apis/">apis</a></li>
+                        
+                        <li><a href="/blog-staging/tags/jvm/">jvm</a></li>
+                        
+                        <li><a href="/blog-staging/tags/static-sites/">static-sites</a></li>
+                        
+                        <li><a href="/blog-staging/tags/re-clojure/">re-clojure</a></li>
+                        
+                        <li><a href="/blog-staging/tags/packages/">packages</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>
+      Copyright &copy; 2022 Practicalli
+      <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p>
+
+      <license id="license">
+        <div>
+          <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution 4.0 ShareAlike License</a>, including custom images & stylesheets.</p>
+          <p>Permissions beyond the scope of this license may be available by contacting <a xmlns:cc="http://creativecommons.org/ns#" href="https://twitter.com/practical_li" rel="cc:morePermissions">@practical_li</a></p>
+          <br>
+          <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>
+        </div>
+      </license>
+
+    </footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog-staging/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
