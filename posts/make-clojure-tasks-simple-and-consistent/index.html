@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: A Post</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/posts/2014-03-10-first-post/">
+    <title>Practicalli: Make Clojure development tasks simple and consistent</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/make-clojure-tasks-simple-and-consistent/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -57,31 +57,65 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">March 10, 2014</div>
+        <div class="col-lg-6">October 23, 2022</div>
         
     </div>
-    <h2>A Post</h2>
+    <h2>Make Clojure development tasks simple and consistent</h2>
 
     <!-- conditional topic logo displayed if :topic has value in a post -->
+    
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-logo-name.png" alt="clojure logo - post topic" />
     
 </div>
 <div>
     
-    <h3 id="this-post-not-fetch-enough">This Post Not Fetch Enough</h3><p>some stuff happened</p><blockquote><p>Stop trying to make fetch happen.</p><ul><li>Regina</li></ul></blockquote>
+    <p><a href="https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html">GNU Make</a> provide a simple and consistent way to run any development task for Clojure &amp; ClojureScript projects (or any other languages).</p><p>Wrap any combination of tools (building, linting, formatting, testing) with make targets for a simple command line interface, with automatically tab completion, making any Clojure project really easy to work with.  Practicalli also uses make to manage docker images and containers to support Clojure development.</p><p>All that is required is <a href="https://github.com/practicalli/dotfiles/blob/main/Makefile">a <code>Makefile</code> in the root of the project</a></p><!--- more - --><h2 id="gnu-make-overview">GNU Make overview</h2><p><a href="https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html">GNU Make</a> is a language agnostic build automation tool which has been an integral part of building Linux/Unix operating system code and applications for decades, providing a consistent way to configure, compile and deploy code for all projects.</p><p>A <code>Makefile</code> defines targets called via the <code>make</code> command. Each target can run one or more commands.  Targets can be dependent on other targets,  e.g the <code>dist</code> target that builds a project can be dependent on <code>deps</code> &amp; <code>test</code> targets.</p><p><a href="https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html">GNU Make</a> is available on all Linux/Unix based operating systems (and Windows via <a href="https://chocolatey.org/">chocolatey</a> or nmake).</p><blockquote><p>Practicalli also uses <code>make</code> to <a href="https://practical.li/blog/posts/build-emacs-28-on-ubuntu/">configure and build the latest versions of Emacs</a> and other Linux open source software</p></blockquote><h2 id="defining-tasks">Defining tasks</h2><p>Create a <code>Makefile</code> in the root of a project and define a target by typing a suitable name followed by a <code>:</code> character, e.g. <code>test:</code></p><p>Insert a tab on the next line and type a command to be called.  Further commands can be added on new lines so long as each line is tab indented.</p><p>The <code>repl</code> target prints out an information message and then uses the <a href="https://clojure.org/guides/install_clojure">Clojure CLI</a> with aliases from <a href="https://github.com/practicalli/clojure-deps-edn">practicalli/clojure-deps-edn</a> to run a Clojure REPL process with a rich terminal UI (<a href="https://github.com/bhauman/rebel-readline">Rebel Readline</a>)</p><pre><code class="makefile">repl:  ## Run Clojure REPL with rich terminal UI (Rebel Readline)
+    $(info --------- Run Rebel REPL ---------)
+    clojure -M:env/dev:env/test:repl/rebel
+</code></pre><h3 id="common-target-naming">Common target naming</h3><p>Targets used across Practicalli projects follow the <a href="https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html">make standard targets for users</a></p><blockquote><p><code>all</code> , <code>test-ci</code> , <code>deps</code> and <code>dist</code> targets are recommended for use with a CI deployment pipeline and builder stage when using Docker.</p></blockquote><ul><li><code>all</code>  calling all targets to prepare the application to be run. e.g. all: deps test-ci dist clean</li><li><code>deps</code> download library dependencies (depend on <code>deps.edn</code> file)</li><li><code>dist</code> create a distribution tar file for this program or zip deployment package for AWS Lambda</li><li><code>lint</code> run lint tools to check code quality  - e.g <a href="https://oxsecurity.github.io/megalinter/">MegaLinter</a> which provides a wide range of tools</li><li><code>format-check</code> report format and style issues for a specific programming language</li><li><code>format-fix</code> update source code files if there are format and style issues for a specific programming language</li><li><code>pre-commit-check</code> run unit tests and code quality targets before considering a Git commit</li><li><code>repl</code> run an interactive run-time environment for the programming language</li><li><code>test-unit</code> run all unit tests</li><li><code>test-ci</code> test running in CI build (optionally focus on integration testing)</li><li><code>clean</code> remove files created by any of the commands from other targets (i.e. ensure a clean build each time)</li></ul><h2 id="target-dependencies">Target dependencies</h2><p>A <code>Makefile</code> target can depend on either a file name or another target in the <code>Makefile</code>.</p><p>The all target typically depends on several <code>Makefile</code> targets to test, compile and package a service.  Add the names of the targets this target depends upon</p><pre><code class="makefile">all: deps test-ci dist clean
+</code></pre><p>Add the filename of a file after the name of the target, to depend on if that file has changed.  If the file has not changed since make was last run then the task will not run again.</p><p>Clojure CLI Example: If the <code>deps</code> target depends on <code>deps.edn</code> and the file has not changed since last run, the deps target will not run again.</p><h2 id="deps-target---depend-on-a-file">deps target - depend on a file</h2><p>The deps target would use Clojure CLI or Leiningen to download dependencies.</p><p>Configuring the <code>deps</code> target to depend on <code>deps.edn</code> or <code>project.clj</code> file, then if the file has not changed the deps will not run again.</p><p>A Clojure CLI example depends on the <code>deps.edn</code> file that defines all the library dependencies for the project, tools for testing and packaging the Clojure service.  The <code>-P</code> flag is the prepare option, a dry run that only downloads the dependencies for the given tasks.</p><pre><code class="makefile">deps: deps.edn  ## Prepare dependencies for test and dist targets
+    $(info --------- Download libraries to test and build the service ---------)
+    clojure -P -X:env/test:package/uberjar
+</code></pre><blockquote><p><code>:env/test</code> adds libraries to run Kaocha and libraries used to run unit tests.  <code>:package/uberjar</code> runs a tool that creates an uberjar.</p></blockquote><h2 id="clean-target---hiding-command-failure">Clean target - hiding command failure</h2><p>The clean target should remove files and directories created by the build (compile) process, to ensure a consistent approach to building each time.</p><p>On Linux / Unix systems files can be deleted with the <code>rm</code> command using <code>-r</code> for recursively deleting a directory and its contents. <code>-f</code> forces the deleting of files and directories, otherwise a prompt for confirmation of the delete may be shown.</p><p><code>-</code> before a command  instructs <code>make</code> to ignore an error code, useful if the files to be deleted did not exist (i.e. the build failed part way through and not all files were created).</p><pre><code class="makefile"># `-` before the command ignores any errors returned
+clean:
+    $(info --------- Clean Clojure classpath cache ---------)
+    - rm -rf ./.cpcache
+</code></pre><h2 id="megalinter-target---simplifying-a-command">MegaLinter target - simplifying a command</h2><p>The <code>lint</code> target is an example of how the <code>Makefile</code> simplifies the command line interface.</p><p><code>lint:</code> target is used to call the MegaLinter runner, avoiding the need to remember the common options passed when calling MegaLinter command line tool, <code>mega-linter-runner</code></p><p>The Java flavor of MegaLinter is less than 2Gb image (full MegaLinter image is 8Gb) and contains all the tools for a Clojure project.  The flavor can only be set via a command line option, so the make file ensures that option is always used and the full MegaLinter docker image is not downloaded by mistake.</p><p>When MegaLinter is configured to generate reports (default), <code>lint-clean:</code> target is used to clean those reports.</p><pre><code class="makefile"># Run MegaLinter with custom configuration
+lint:
+    $(info --------- MegaLinter Runner ---------)
+    mega-linter-runner --flavor java --env 'MEGALINTER_CONFIG=.github/linters/mega-linter.yml'
+
+lint-clean:
+    $(info --------- MegaLinter Clean Reports ---------)
+    - rm -rf ./megalinter-reports
+</code></pre><h2 id="enhancing-make-output">Enhancing make output</h2><p>The <code>info</code> message is used with each target to enhances the readability of the make output, especially when multiple targets and commands are involved, or if commands are generating excessive output to standard out.</p><pre><code class="makefile"> test:
+    $(info --------- Runner for unit tests ---------)
+    ./bin/test
+</code></pre><p><img src="https://raw.githubusercontent.com/practicalli/graphic-design/live/clojure/makefile-clojure-make-all-output-with-info.png" alt="Makefile showing make all output with info messages to separate the Clojure commands and output" /></p><h2 id="avoiding-file-name-collisions">Avoiding file name collisions</h2><p>Although unlikely, if a filename in the root of a project has the same name as a <code>Makefile</code> target, it can be used instead of running the targets command</p><p><code>.PHONY:</code> defines the names of targets in the <code>Makefile</code> to avoid name clashes</p><pre><code class="makefile">.PHONY: all lint deps test test-ci dist clean
+</code></pre><blockquote><p>Reference: <a href="https://makefiletutorial.com/#phony">https://makefiletutorial.com/#phony</a></p></blockquote><h2 id="halt-on-failure">Halt on failure</h2><p><code>.DELETE_ON_ERROR:</code> halts any further commands if a command returns non-zero exit status.  Useful as short-circuit to stop tasks when further work is not valuable, e.g. if tests fail then it may not be valuable to build the Clojure project.</p><pre><code class="makefile">.DELETE_ON_ERROR:
+all: deps test-ci dist clean
+</code></pre><blockquote><p>Reference: <a href="https://makefiletutorial.com/#delete_on_error">https://makefiletutorial.com/#delete_on_error</a></p></blockquote><h2 id="references">References</h2><ul><li><a href="https://makefiletutorial.com/">Makefile Tutorial by Example</a></li></ul><h2 id="summary">Summary</h2><p>A <code>Makefile</code> can simplify the command line interface for any task with a Clojure project (or any other language and tooling).</p><p>Using the same target names across all projects reduces the cognitive load for driving any project.</p><p>Thank you.
+<a href="https://twitter.com/practical_li">@practical_li</a></p>
 </div>
 
 <div id="post-tags">
     <b>Tags: </b>
     
-    <a href="/blog-staging/tags/not%20fetch/">not fetch</a>
+    <a href="/blog-staging/tags/makefile/">makefile</a>
+    
+    <a href="/blog-staging/tags/clojure/">clojure</a>
+    
+    <a href="/blog-staging/tags/clojure-cli/">clojure-cli</a>
+    
+    <a href="/blog-staging/tags/make/">make</a>
     
 </div>
 
 
     <div id="prev-next">
         
-        <a href="/blog-staging/posts/2014-11-04-second-post/">&laquo; Yet Another Post</a>
         
+        <a class="right" href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main &raquo;</a>
         
     </div>
 
@@ -89,8 +123,8 @@
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = "http://practical.li/blog-staging/posts/2014-03-10-first-post/";
-            this.page.identifier = "A Post";
+            this.page.url = "http://practical.li/blog-staging/posts/make-clojure-tasks-simple-and-consistent/";
+            this.page.identifier = "Make Clojure development tasks simple and consistent";
         };
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
