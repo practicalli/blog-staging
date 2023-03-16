@@ -81,7 +81,7 @@ RUN clojure -P -X:env/test:package/uberjar
 </code></pre><p>If <a href="https://practical.li/blog/posts/make-clojure-tasks-simple-and-consistent/">using make for the build</a>, also copy the <code>Makefile</code> to the builder stage and call the <code>deps</code> target to download the dependencies (ensure <code>deps</code> target in the <code>Makefile</code> depends on the <code>deps.edn</code> file so the target is skipped if that file has not changed)</p><pre><code class="dockerfile">COPY deps.edn Makefile /build/
 RUN make deps
 </code></pre><blockquote><p>Maximising the docker cache by careful consideration of command order and design in a <code>Dockerfile</code> can have a significant positive affect on build speed. Each command is effectively a layer in the Docker image and if its respective files have not changed, then the cached version of the command will be run</p></blockquote><p>Now the dependencies are downloaded (and cached), copy the project files to the docker builder working directory and run the command to generate an Uberjar.</p><pre><code class="dockerfile">COPY ./ /build
-RUN clojure -X:package/uberjar
+RUN clojure -T:build
 </code></pre><blockquote><p>See the section on Docker Ignore Patters to make the COPY command more efficient</p></blockquote><p><code>:package/uberjar</code> is an alias in the <code>deps.edn</code> project that includes the dependencies and tools to build the Clojure project into an Uberjar.  The latest approach for building an Uberjar is to use <a href="https://clojure.org/guides/tools_build">Clojure tools.build</a>, optionally with <a href="https://github.com/seancorfield/build-clj">seancorfield/build-clj</a>.</p><p>If <a href="https://practical.li/blog/posts/make-clojure-tasks-simple-and-consistent/">using make for the build</a>  call the <code>all</code> target to run CI tests, download dependencies (if not cached) and run the dist target to build the Uberjar.  Or call <code>make dist</code> if the CI pipeline has already run tests.</p><pre><code class="dockerfile">COPY ./ /build
 RUN RUN make all
 </code></pre><h3 id="docker-ignore-patterns">Docker Ignore patterns</h3><p><code>.dockerignore</code> file in the root of the project defines file and directory patterns that Docker will ignore with the COPY command.  Use <code>.dockerignore</code> to avoid copying files that are not required for the build</p><p>Keep the <code>.dockerignore</code> file simple by excluding all files with <code>*</code> pattern and then use the <code>!</code> character to explicitly add files and directories that should be copied</p><pre><code># Ignore all files
@@ -186,6 +186,8 @@ CMD ["java", "-jar", "/service/practicalli-service.jar"]
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Build Emacs from source on Ubuntu Linux</a></li>
+                        
                         <li><a href="/blog-staging/posts/london-clojurians-community-a-brief-history/">London Clojurians Community - a relatively brief history</a></li>
                         
                         <li><a href="/blog-staging/posts/build-and-run-clojure-with-multistage-dockerfile/">Build and run Clojure with Multi-stage Dockerfile</a></li>
@@ -194,15 +196,13 @@ CMD ["java", "-jar", "/service/practicalli-service.jar"]
                         
                         <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
                         
-                        <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
-                        
                         <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
+                        
+                        <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
                         
                         <li><a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a></li>
                         
                         <li><a href="/blog-staging/posts/java-17-lts-for-clojure-development/">Java 17 JDK for Clojure development</a></li>
-                        
-                        <li><a href="/blog-staging/posts/code-snippets-for-clojure-lsp/">Code Snippets for Clojure LSP</a></li>
                         
                     </ul>
                 </div>
