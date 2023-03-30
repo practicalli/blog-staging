@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli</title>
-    <link rel="canonical" href="http://practical.li">
+    <title>Practicalli: Create deps-new templates for Clojure CLI projects</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -56,102 +56,92 @@
             <div id="content">
                 
 <div id="post">
-    
     <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/">Overview of Language Server Protocol LSP for Clojure development</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">March 20, 2021</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-lsp-logo-name.png" alt="clojure-lsp logo" />
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">March 30, 2023</div>
         
     </div>
-    <p>Microsoft Language Server Protocol, LSP, is exactly what the name says it is.  Its a (JSON RPC) protocol.  Its no more and no less than that.  LSP is however a big strategy peace for Mircrosoft to encourage developers to adopt VS Code, which naturally provides support for the LSP protocol.  The implementation of tooling that uses LSP is left to companies and communities that develop editor and related tools.</p><p>Standards can be an opportunity to focus development work and provide a rich set of tools that are far easier to integrate.  There are many examples of where a protocol has provided a huge amount of diversity, such as TCP/IP, DNS, HTTP and HTML protocols that drove the creation of the web we know today. Standard protocols in themselves did not make the web, but allowed developers to build on top of them and create the rich and diverse experience on the web that we see today.</p><p>LSP is no different.  By itself LSP provides no benefit.  However, when adopted as a standard by tooling developers it has the potential to help grow an even richer experience for the whole developer community.</p>
-    <a href="/blog-staging/posts/overview-of-language-server-protocol-lsp-for-clojure-development/">Continue reading &#8594;</a>
-    <hr>
+    <h2>Create deps-new templates for Clojure CLI projects</h2>
+
+    <!-- conditional topic logo displayed if :topic has value in a post -->
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/brave-clojure-redux-part01-the-repl/">Brave Clojure redux - part 1 - the REPL</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">February 16, 2021</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/learning-clojure-logo-name.png" alt="learning-clojure logo" />
-        
-    </div>
-    <p>Brave Clojure redux is series that revisits the code examples and tooling covered in the book: "Clojure for the Brave and the True".  The good news is you do not need to be brave or true to read the book or learn Clojure either.  It does help if you have some time and motivation though.</p><p>Brave Clojure redux uses Clojure CLI tools rather than Leiningen as used in Brave Clojure.  Code examples will be used from the book, complemented with additional examples where relevant.</p><p>Part 1 covers the Clojure REPL process, a vital part of Clojure development. The basics of building and running a project are also included.</p>
-    <a href="/blog-staging/posts/brave-clojure-redux-part01-the-repl/">Continue reading &#8594;</a>
-    <hr>
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-cli-logo-name.png" alt="clojure-cli logo - post topic" />
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/clojure-repl-jack-in-or-connect/">Clojure CLI tools - To jack-in or connect, that is the question</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">December 31, 2020</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-cli-logo-name.png" alt="clojure-cli logo" />
-        
-    </div>
-    <p><em>To jack-in or connect, that is the question</em>.
-<em>Whether it is more effective to relying on the editor to auto-inject the required dependencies for every workflow, or assemble your own aliases them include any editor</em> - William "Hacker" Shakespear</p><p>A REPL is the central part of Clojure development. For the full workflow, an editor connects to the REPL to evaluate code and show instant results.</p><p>The developer can be in control of how the REPL starts, managing libraries and tools used alongside the REPL.  Or the editor can automate the process and control how the REPL is started.</p>
-    <a href="/blog-staging/posts/clojure-repl-jack-in-or-connect/">Continue reading &#8594;</a>
-    <hr>
+</div>
+<div>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/clojure-cli-aliases-deserve-designing-too/">Clojure CLI tools aliases deserve good design too</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">December 11, 2020</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-cli-logo-name.png" alt="clojure-cli logo" />
-        
-    </div>
-    <p>Aliases in <a href="https://practicalli.github.io/clojure/clojure-tools/using-clojure-tools.html">Clojure CLI tools</a> are an important way to configure how to work with a Clojure project effectively, so they deserve the same attention and clean design applied to source code, test code and other configuration.</p><p><a href="https://github.com/practicalli/clojure-deps-edn"><code>practicalli/clojure-deps-edn</code></a> provides examples of over 50 aliases crafted to use over multiple projects and providing access to a wide range of Clojure CLI community tools.</p><p>One way to kill the excellent experience that Clojure CLI tools bring is to write aliases that conflate concepts and are just a catch all for loosely related configuration.  Without applying a little thought and design to aliases it just makes more work later on.</p>
-    <a href="/blog-staging/posts/clojure-cli-aliases-deserve-designing-too/">Continue reading &#8594;</a>
-    <hr>
+    <p>A project template can save time when creating new project by providing all the common configuration, dependencies and code used by the engineering team.</p><p>There are many Clojure/Script templates in the community, although most are relatively simple.</p><p>Practicalli has been using a GitHub template for new projects, although many small changes were required each time.  Using placeholders in the template, specific projects can instantly be created and run straight away.</p><!-- more --><p><a href="https://github.com/seancorfield/deps-new">seancorfield/deps-new</a> provides a simple mechanism for defining templates and is provided as a Clojure CLI tool.  Several templates are included in the tool and <a href="https://github.com/seancorfield/deps-new#templates">community templates</a> can be used from Git repositories or the local filespace.</p><ul><li><code>app</code> - simple project for a running application (uberjar)</li><li><code>lib</code> - simple project for a library (jar)</li></ul><blockquote><p>deps-new does not support templates published via Maven / Clojars</p><p><a href="https://github.com/seancorfield/clj-new">seancorfield/clj-new</a> uses the Leiningen template format, providing wide range of project templates, although many of those templates do not include a Clojure CLI configuration.  The clj-new project is not actively maintained.</p></blockquote><h2 id="create-template">Create template</h2><p>deps-new has a template called <code>template</code> for creating a custom template project 😱</p><p>Use the <code>:project/create</code> alias from Practicalli Clojure CLI Config to create a new project with deps-new, using the deps-new template and creating in a specific directory</p><pre><code class="clojure">clojure -T:project/create :template template :name practicalli.template/service :target-dir clojure-cli-project-templates
+</code></pre><blockquote><p><code>clojure -Tnew template :name practicalli/service</code> if deps-new was <a href="https://github.com/seancorfield/deps-new#templates">installed as a Clojure CLI tool</a></p></blockquote><p>Version control the newly created template project and start customising.</p><h2 id="use-template">Use template</h2><p>For an effective local development workflow, use the template via a <code>:local/root</code> reference to include the new template project as a dependency.</p><pre><code class="clojure">:lib/templates
+{practicalli/templates {:local/root "home/practicalli/projects/practicalli/clojure-cli-project-templates/"}}
+</code></pre><p>Then include the library when calling the :project/create alias and specify values for <code>:template</code> and <code>:name</code> keys</p><pre><code class="shell">clojure -A:lib/templates -T:project/create :template practicalli.template/service :name practicalli/service
+</code></pre><p>Or include the template library within the <code>:project/create</code> alias and specify default values for <code>:template</code> and <code>:name</code></p><pre><code class="clojure">  :project/create
+  {:replace-deps {io.github.seancorfield/deps-new
+                  {:git/tag "v0.5.0" :git/sha "48bf01e"}
+                  practicalli/clojure-cli-project-templates
+                  {:local/root "/home/practicalli/projects/practicalli/clojure-cli-project-templates/"}}
+   :exec-fn      org.corfield.new/create
+   :exec-args    {:template practicalli.template/service
+                  :name practicalli/service}}
+</code></pre><!-- Or include the practicalli/clojure-cli-project-templates git repo within the `:project/create` alias definition --><!-- ```clojure --><!--   :project/create --><!--   {:replace-deps {io.github.seancorfield/deps-new {:git/tag "v0.5.0" :git/sha "48bf01e"} --><!--                  practicalli/clojure-cli-project-templates {:git/tag "v0.0.1" :git/sha "1234343"}} --><!--    :exec-fn      org.corfield.new/create --><!--    :exec-args    {:template practicalli.template/service --><!--                   :name practicalli/service}} --><!-- ``` --><p>This simplifies the command to make a project called practicalli/service</p><pre><code class="shell">clojure -T:project/create
+</code></pre><p>Or add a specific <code>:name</code> value to create a project with a different name</p><pre><code class="shell">clojure -T:project/create :name practicalli.template/gameboard
+</code></pre><h2 id="template-deconstruction">Template Deconstruction</h2><p>The files that make up the template reside under the <code>resources</code> directory, e.g. <code>resources/practicalli/template/service/</code> for the Practicalli Service template</p><p>The default structure of the template is</p><ul><li><code>build</code> - files for managing the dependencies (<code>deps.edn</code>) and build (<code>build.clj</code>) in the new project</li><li><code>root</code> - files and directories to be added to the root of the new project</li><li><code>src</code> - files &amp; directories providing default code examples</li><li><code>test</code> - files &amp; directories providing default test code examples</li></ul><p>By convention, Clojure files with <code>{{}}</code> substitution blocks have the <code>tmpl</code> extension to avoid errors from tooling that compiles or analyses code, should those files be added to the classpath.</p><p>Practicalli uses <code>.clj.template</code> and  <code>.edn.template</code> file name extensions for additional clarity</p><h2 id="assembling-the-template">Assembling the template</h2><p><code>resources/practicalli/template/service/</code> directory contains files that will be added to a new project</p><p>As seen above, by default the entire folder is copied, with specified files renamed. Sometimes it is convenient to copy only specified files from a folder and ignore the other files in that folder. You can specify :only as the last element of the transformation tuple:</p><p>;; template.edn
+{:transform
+[["src" "src/{{top/file}}"
+{"main.clj" "{{main/file}}.clj"}]
+["test" "test/{{top/file}}"
+{"main_test.clj" "{{main/file}}_test.clj"}
+:only]]}</p><h2 id="customising-files">Customising files</h2><h2 id="binary-files">binary files</h2><p>Add <code>:raw</code> to the transformation directive in <code>template.edn</code></p><pre><code class="clojure">{:transform [["resources" "resources/{{top/file}}"]
+             ["templates" "resources/{{top/file}}/templates" :raw]]}
+</code></pre><h2 id="customise-the-template">Customise the template</h2><p>substitutions</p><p><code>"{{text}}"</code> substitutes <code>text</code> with a match from either built-in variables or command-line argument</p><p><code>(ns {{top/ns}}.{{main/ns}})</code> substitutes the fully qualified namespace within an ns expression.</p><p>common substitutions</p><ul><li><code>{{raw-name}}</code> uses value from <code>:name</code></li></ul><h2 id="programatic-transformation">Programatic transformation</h2><p>https://github.com/seancorfield/deps-new/blob/develop/doc/templates.md#programmatic-transformation</p><h2 id="test-the-template">Test the template</h2><p>template.edn contains a declarative configuration of the project a template will generate</p><p><code>practicalli/template/service.clj</code></p><p><code>practicalli/template/service_test.clj</code> defines a unit test with <code>clojure.test</code> and <code>clojure.spec</code> which test the <code>practicalli/template/service/template.edn</code> configuration.</p><p>The template configuration is tested against the <a href="https://github.com/seancorfield/deps-new/blob/develop/src/org/corfield/new.clj"><code>org.corfield.new/template</code> specification</a></p><p>Specification defined with clojure.spec</p><pre><code class="clojure">(s/def ::root string?)
+(s/def ::description string?)
+(s/def ::data-fn symbol?)
+(s/def ::template-fn symbol?)
+(s/def ::files (s/map-of string? string?))
+(s/def ::open-close (s/tuple string? string?))
+(s/def ::opts #{:only :raw})
+(s/def ::dir-spec (s/cat :src string?
+                         :target (s/? string?)
+                         :files (s/? ::files)
+                         :delims (s/? ::open-close)
+                         :opts (s/* ::opts)))
+(s/def ::transform (s/coll-of ::dir-spec :min-count 1))
+(s/def ::template (s/keys :opt-un [::data-fn ::description ::root ::template-fn ::transform]))
+</code></pre><h2 id="add-more-template">Add more template</h2><p>More templates can be added to the same project, especially if they are logically connected (part of the same team or organisation)</p><ul><li><code>resources/practicalli/template/new-template-name</code> constaining all the code and configuration for the new project.</li><li><code>src/practicalli/template</code> - add <code>template_name.clj</code></li><li><code>test/practicalli/template</code> - add <code>template_name_test.clj</code></li></ul><blockquote><p>Alternatively, create further deps-new template projects for different companies and organisations</p></blockquote>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/cloure-community-getting-help/">Clojure community - getting help</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">July 15, 2020</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-logo-name.png" alt="clojure logo" />
-        
-    </div>
-    <p>A guide to getting help from the Clojure community.  There are several ways you can get help so you can use which you find more valuable and rewarding.  The most active tools include:</p><ul><li><a href="https://ask.clojure.org/">ask.clojure.org</a> - official forum with the Clojure maintainers, help shape the development of Clojure</li><li><a href="https://clojurians.slack.com/">Clojurian Slack community</a> - very active community chat for immediate / shot term discussions</li><li><a href="http://clojurians.zulipchat.com/">Clojurians Zulip</a> - active community chat with topic-based threading and full history, strong data science community and archive of most slack channels</li><li><a href="https://clojureverse.org/">ClojureVerse</a> - community forum for friendly short to long-term discussions</li><li><a href="https://old.reddit.com/r/Clojure/comments/hqpyv9/new_clojurians_ask_anything/">New Clojurians: Ask Anything</a> - simple web based threaded discussions</li></ul><p>General website such as <a href="https://www.reddit.com/r/Clojure/">redit/clojure</a> are useful ways for the Clojure community to reach out to the more general development community.</p>
-    <a href="/blog-staging/posts/cloure-community-getting-help/">Continue reading &#8594;</a>
-    <hr>
+    <a href="/blog-staging/tags/clojure/">clojure</a>
     
+    <a href="/blog-staging/tags/clojure-cli/">clojure-cli</a>
+    
+</div>
+
 
     <div id="prev-next">
         
-        <a class="left" href="/blog-staging/p/3/">&laquo; Prev</a>
         
-        
-        <a class="right" href="/blog-staging/p/5/">Next &raquo;</a>
+        <a class="right" href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Build Emacs from source on Ubuntu Linux &raquo;</a>
         
     </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://practical.li/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/";
+            this.page.identifier = "Create deps-new templates for Clojure CLI projects";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//practicalli-blog.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
             </div>
