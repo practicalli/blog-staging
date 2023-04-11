@@ -76,7 +76,7 @@
 </code></pre><p>Include the new template as a library when calling deps-new, e.g. with the <code>:project/create</code> alias from <a href="https://practical.li/clojure/clojure-cli/practicalli-config/">Practicalli Clojure CLI Config</a>, specifying values for <code>:template</code> and <code>:name</code> keys (both keys are required for deps-new)</p><pre><code class="shell">clojure -A:lib/templates -T:project/create :template practicalli/service :name practicalli.gameboard/service
 </code></pre><p>Alternatively, include the new template project within the <code>:project/create</code> alias definition, optionally specifying default values for <code>:template</code> and <code>:name</code> with the :<code>exec-args</code> key</p><pre><code class="clojure">  :project/create
   {:replace-deps {io.github.seancorfield/deps-new
-                  {:git/tag "v0.5.0" :git/sha "48bf01e"}
+                  {:git/tag "v0.5.1" :git/sha "48bf01e"}
                   practicalli/clojure-cli-project-templates
                   {:local/root "/home/practicalli/projects/practicalli/clojure-cli-project-templates/"}}
    :exec-fn      org.corfield.new/create
@@ -85,7 +85,15 @@
 </code></pre><p>Then the command to create a new project is greatly simplified</p><pre><code class="shell">clojure -T:project/create
 </code></pre><p>Providing a specific project name will override the default <code>:name</code> value</p><pre><code class="shell">clojure -T:project/create :name practicalli.template/gameboard
 </code></pre><p>And specifying a template will override the default <code>:template</code> value</p><pre><code class="shell">clojure -T:project/create :template practicalli/application :name practicalli.template/gameboard
-</code></pre><blockquote><p><a href="https://practical.li/clojure/clojure-cli/practicalli-config/">Practicalli Clojure CLI Config</a> has been updated to include the <a href="https://github.com/practicalli/project-templates">practicalli/project-templates</a> dependency, making available all the Practicalli templates.</p></blockquote><h2 id="new-template-overview">New Template Overview</h2><p>The files that make up the template reside under the <code>resources</code> directory, e.g. <code>resources/practicalli/service/</code> for the Practicalli Service template</p><ul><li><code>build</code> - source of the dependencies (<code>deps.edn</code>) and build (<code>build.clj</code>) files in the new project</li><li><code>root</code> - files and directories to be added to the root of the new project</li><li><code>src</code> - files &amp; directories providing default code examples</li><li><code>test</code> - files &amp; directories providing default test code examples</li><li><code>template.edn</code> - values for substitution,  declarative <code>:transform</code> rules for copying files and directories to a new project (values optionally used for programmatic transformation)</li></ul><p>This is the default structure and can be modified as required.  The <code>template.edn</code> should be modified to match any changes in directory structure.</p><blockquote><p>By convention, Clojure files with <code>{{}}</code> substitution blocks have the <code>tmpl</code> extension to avoid errors from tooling that compiles or analyses code, should those files be added to the classpath.</p><p>Practicalli uses <code>.clj.template</code> and  <code>.edn.template</code> file name extensions with files that contain substitutions for additional clarity</p></blockquote><h2 id="substitution">Substitution</h2><p>Key value pairs in <code>template.edn</code> can be used for substitution within the files of the template.</p><p>deps-new <a href="https://github.com/seancorfield/deps-new/blob/develop/doc/names-variables.md">provides derived values from <code>:name</code> and environment variables</a> e.g. <code>developer</code>, <code>now/date</code>, etc</p><p>Custom variables can be added to provide template specific substitutions, e.g. defining library and tool versions to use in the template (simplifying library version updates)</p><pre><code class="clojure"> ;; ---------------------------------------------------------
+</code></pre><blockquote><p><a href="https://practical.li/clojure/clojure-cli/practicalli-config/">Practicalli Clojure CLI Config</a> has been updated to include the <a href="https://github.com/practicalli/project-templates">practicalli/project-templates</a> dependency, making available all the Practicalli templates.</p></blockquote><h2 id="new-template-overview">New Template Overview</h2><p>The files that make up the template reside under the <code>resources</code> directory, e.g. <code>resources/practicalli/service/</code> for the Practicalli Service template</p><ul><li><code>build</code> - source of the dependencies (<code>deps.edn</code>) and build (<code>build.clj</code>) files in the new project</li><li><code>root</code> - files and directories to be added to the root of the new project</li><li><code>src</code> - files &amp; directories providing default code examples</li><li><code>test</code> - files &amp; directories providing default test code examples</li><li><code>template.edn</code> - values for substitution,  declarative <code>:transform</code> rules for copying files and directories to a new project (values optionally used for programmatic transformation)</li></ul><p>This is the default structure and can be modified as required.  The <code>template.edn</code> should be modified to match any changes in directory structure.</p><blockquote><p>By convention, Clojure files with <code>{{}}</code> substitution blocks have the <code>tmpl</code> extension to avoid errors from tooling that compiles or analyses code, should those files be added to the classpath.</p><p>Practicalli uses <code>.clj.template</code> and  <code>.edn.template</code> file name extensions with files that contain substitutions for additional clarity</p></blockquote><h2 id="copy-files">Copy files</h2><p>Files in the <code>root</code> directory of the template are copied to the root of the new project by default. If a file names should be transformed, then create a new directory in the template to contain those files and add an explicit rule to the <code>:transform</code> section.  Remember to remove the files from the <code>root</code> directory, otherwise they will still be copied.</p><p><code>:transform</code> key contains declarative rules that define where the contents of each directory in the template is copied to in a new project created from the template, e.g.:</p><ul><li><code>"build" ""</code> copies files in the 'build' directory of the template to the root of a new project</li><li><code>"src" "src/{{top/file}}"</code> copies files to the <code>src</code> directory in a sub-directory provided by the template substitution, e.g <code>src/practicalli/gameboard</code></li></ul><p>The <code>build</code> files from the original deps-new template were renamed to <code>deps.edn.template</code> and <code>build.clj.template</code> to include their original filename extension and be very explicitly named.</p><pre><code class="edn">:transform
+ [["build" ""
+   {"build.clj.template" "build.clj"
+    "deps.edn.template"  "deps.edn"}]
+  ["src" "src/{{top/file}}"
+   {"service.clj.template" "{{main/file}}.clj"}]
+  ["test" "test/{{top/file}}"
+   {"service_test.clj.template" "{{main/file}}_test.clj"}]]
+</code></pre><p>The <code>:only</code> keyword added to the end of a transform mapping will only copy a specified file from the directory, ignoring all other files.</p><blockquote><p>HINT: practicalli/service template includes a <code>resources/config.edn.template</code> that will be copied to <code>resources/config.edn</code> in a new project.  The existing <code>resources</code> directory in <code>root</code> was removed to ensure <code>resources/.keep</code> is not copied to the new project.</p></blockquote><blockquote><p>Keywords in <code>template.edn</code> are also used  with the <code>data-fn</code> and <code>transform-fn</code> for <a href="https://github.com/seancorfield/deps-new/blob/develop/doc/templates.md#programmatic-transformation">programmatic transformation</a>.</p></blockquote><h2 id="substitution">Substitution</h2><p><code>{{key}}</code> in any of the copied files will substitute the value associated with <code>key</code></p><p>deps-new <a href="https://github.com/seancorfield/deps-new/blob/develop/doc/names-variables.md">provides derived values from <code>:name</code> and environment variables</a> e.g. <code>developer</code>, <code>now/date</code>, etc</p><p>Add key value pairs in <code>template.edn</code> for custom substitution</p><p>Custom variables can be added to provide template specific substitutions, e.g. defining library and tool versions to use in the template (simplifying library version updates)</p><p>For example, the library versions in <code>:deps</code> section of the <code>deps.edn.template</code> can be defined in the template, providing a simple way to update versions (especially if libraries are used in multiple aliases).</p><pre><code class="clojure"> ;; ---------------------------------------------------------
  ;; Tool versions
  :clojure-cli-version "1.11.1"
 
@@ -95,15 +103,24 @@
  :tools-build-tag "v0.9.4"
  :tools-build-sha "76b78fe"
  ;; ---------------------------------------------------------
-</code></pre><h2 id="declarative-transformation">Declarative Transformation</h2><p><code>:transform</code> key contains declarative rules to map the files within each template directory to their paths in the new project, e.g.:</p><ul><li><code>"build" ""</code> copies files in the 'build' directory of the template to the root of a new project</li><li><code>"src" "src/{{top/file}}"</code> copies files to the <code>src</code> directory in a sub-directory provided by the template substitution, e.g <code>src/practicalli/gameboard</code></li></ul><p>Files in the <code>root</code> directory of the template are copied to the root of the new project by default. If a file name should be transformed, then create a new directory in the template and add an explicit rule to the <code>:transform</code> section</p><p>The <code>build</code> files from the original deps-new template were renamed to <code>deps.edn.template</code> and <code>build.clj.template</code> to include their original filename extension and be very explicitly named.</p><pre><code class="edn">:transform
- [["build" ""
-   {"build.clj.template" "build.clj"
-    "deps.edn.template"  "deps.edn"}]
-  ["src" "src/{{top/file}}"
-   {"service.clj.template" "{{main/file}}.clj"}]
-  ["test" "test/{{top/file}}"
-   {"service_test.clj.template" "{{main/file}}_test.clj"}]]
-</code></pre><p>The <code>:only</code> keyword added to the end of a transform mapping will only copy a specified file from the directory, ignoring all other files.</p><blockquote><p>Keywords in <code>template.edn</code> are also used  with the <code>data-fn</code> and <code>transform-fn</code> for <a href="https://github.com/seancorfield/deps-new/blob/develop/doc/templates.md#programmatic-transformation">programmatic transformation</a>.</p></blockquote><h2 id="common-substitutions">Common Substitutions</h2><p><code>"{{description}}"</code> substitutes the value associated with the <code>:description</code> key from the <code>template.edn</code> file or command-line argument.  Typically used in the project readme.md file and/or the comment header of the main namespace</p><p><code>(ns {{top/ns}}.{{main/ns}})</code> substitutes the fully qualified namespace within an ns expression, creating the project specific namespace for source and test files.</p><p><code>{{raw-name}}</code> uses value from <code>:name</code> passed as an argument</p><blockquote><p>Default values for template.edn keys can also be defined in the <code>:exec-args {}</code> of an alias for the project template</p><pre><code class="clojure">  :exec-args {:template practicalli/service
+</code></pre><blockquote><p>When creating a template from an existing project, the dependencies can be copied from the <code>:deps</code> key in <code>deps.edn</code> and pasted as top level keys in the <code>template.edn</code> file.  The library names should be converted to keywords by prefixing a <code>:</code></p></blockquote><p>The <code>deps.edn.template</code> can then use substitution to include the maven or git dependencies</p><pre><code class="clojure"> :deps
+ {;; Service
+  http-kit/http-kit  {{:http-kit/http-kit}}  ; latest "2.7.0-alpha1"
+  metosin/reitit     {{:metosin/reitit}}
+  metosin/reitit-dev {{:metosin/reitit-dev}} ; human readable exceptions
+
+  ;; Logging
+  com.brunobonacci/mulog             {{:com.brunobonacci/mulog}}
+  com.brunobonacci/mulog-adv-console {{:com.brunobonacci/mulog-adv-console}}
+
+  org.slf4j/slf4j-nop {{:org.slf4j/slf4j-nop}} ; suppress http server logger warning
+
+  ;; System
+  aero/aero           {{:aero/aero}}
+  integrant/integrant {{:integrant/integrant}}
+  org.clojure/clojure {{:org.clojure/clojure}}
+}
+</code></pre><h2 id="common-substitutions">Common Substitutions</h2><p><code>"{{description}}"</code> substitutes the value associated with the <code>:description</code> key from the <code>template.edn</code> file or command-line argument.  Typically used in the project readme.md file and/or the comment header of the main namespace</p><p><code>(ns {{top/ns}}.{{main/ns}})</code> substitutes the fully qualified namespace within an ns expression, creating the project specific namespace for source and test files.</p><p><code>{{raw-name}}</code> uses value from <code>:name</code> passed as an argument</p><blockquote><p>Default values for template.edn keys can also be defined in the <code>:exec-args {}</code> of an alias for the project template</p><pre><code class="clojure">  :exec-args {:template practicalli/service
               :name practicalli.gameboard/service}
 </code></pre></blockquote><h2 id="build-files">Build files</h2><blockquote><p>By convention, Clojure files with <code>{{}}</code> substitution blocks have the <code>tmpl</code> extension to avoid errors from tooling that compiles or analyses code, should those files be added to the classpath.</p><p>Practicalli uses <code>.clj.template</code> and  <code>.edn.template</code> file name extensions with files that contain substitutions for additional clarity</p></blockquote><p><code>deps.edn.template</code> is a Clojure CLI deps.edn configuration file with substitutions for versions for each of the included dependencies</p><pre><code class="clojure"> :deps
  {org.clojure/clojure    {:mvn/version "{{clojure-cli-version}}"}
@@ -138,7 +155,73 @@
    :exec-fn      org.corfield.new/create
    :exec-args    {:template practicalli.template/service
                   :name practicalli/service}}
-</code></pre><h2 id="add-more-template">Add more template</h2><p>Multiple templates can be added to the same project, especially if they are logically connected (e.g. part of the same team or organisation).</p><p>A single dependency can be used if all templates are available in the same project.</p><p>Each template is referred to via its namespace, e.g. <code>practicalli/service</code>, <code>practicalli/application</code>, etc.</p><ul><li><code>resources/practicalli/new-template-name</code>: add all the code and configuration for the new project, typically following the <code>build</code>, <code>root</code>, <code>src</code> and <code>test</code> directory name convention</li><li><code>src/practicalli/</code>: add <code>template_name.clj</code></li><li><code>test/practicalli/</code>: add <code>template_name_test.clj</code></li></ul><h2 id="advanced-transformations">Advanced transformations</h2><p>Create a follow up article...</p><p><a href="https://github.com/seancorfield/deps-new/blob/develop/doc/templates.md#programmatic-transformation">Programatic transformation</a></p>
+</code></pre><h2 id="add-more-template">Add more template</h2><p>Multiple templates can be added to the same project, especially if they are logically connected (e.g. part of the same team or organisation).</p><p>A single dependency can be used if all templates are available in the same project.</p><p>Each template is referred to via its namespace, e.g. <code>practicalli/service</code>, <code>practicalli/application</code>, etc.</p><ul><li><code>resources/practicalli/new-template-name</code>: add all the code and configuration for the new project, typically following the <code>build</code>, <code>root</code>, <code>src</code> and <code>test</code> directory name convention</li><li><code>src/practicalli/</code>: add <code>template_name.clj</code></li><li><code>test/practicalli/</code>: add <code>template_name_test.clj</code></li></ul><h2 id="advanced-transformations">Advanced transformations</h2><p>Create a follow up article...</p><p><a href="https://github.com/seancorfield/deps-new/blob/develop/doc/templates.md#programmatic-transformation">Programatic transformation</a></p><h2 id="experiments">Experiments</h2><p>!!! HINT "use name not keyword"
+Ensure the name of the keyword is used in the <code>{{}}</code> substitution rather that the keyword, or the substitution will not match (assume all substitution text is converted to a keyword by deps-new and therefore does not find a match as it has <code>::</code> prefix)</p><h3 id="using-qualified-keywords-as-values">Using qualified keywords as values</h3><p>Qualified keywords in a hash-map can be used as a value for a keyword in the template.edn file, to be used as a substitution</p><p>Note that the qualifier is taken from the key and placed on the hash-map itself</p><pre><code class="clojure"> :deps
+ {;; Service
+  http-kit/http-kit  {{http-kit/http-kit}}  ; latest "2.7.0-alpha1"
+  metosin/reitit     {{metosin/reitit}}
+  metosin/reitit-dev {{metosin/reitit-dev}} ; human readable exceptions
+
+  ;; Logging
+  com.brunobonacci/mulog             {{com.brunobonacci/mulog}}
+  com.brunobonacci/mulog-adv-console {{com.brunobonacci/mulog-adv-console}}
+
+  org.slf4j/slf4j-nop {{org.slf4j/slf4j-nop}} ; suppress http server logger warning
+
+  ;; System
+  aero/aero           {{aero/aero}}
+  integrant/integrant {{integrant/integrant}}
+  org.clojure/clojure {{org.clojure/clojure}}
+}
+</code></pre><p>Keys in the <code>template.edn</code> file</p><pre><code class="clojure"> ;; ---------------------------------------------------------
+ ;; Version substitutions
+
+ ;; Library versions
+ :org.clojure/clojure    {:mvn/version "1.11.1"}
+
+ :http-kit/http-kit {:mvn/version "2.6.0"}  ; latest "2.7.0-alpha1"
+ :metosin/reitit    {:mvn/version "0.5.13"}
+ :metosin/reitit-dev {:mvn/version "0.5.18"} ; human readable exceptions
+
+  ;; Logging
+ :com.brunobonacci/mulog             {:mvn/version "0.9.0"}
+ :com.brunobonacci/mulog-adv-console {:mvn/version "0.9.0"}
+  ;; suppress default logger warning from http server
+ :org.slf4j/slf4j-nop {:mvn/version "1.7.32"}
+
+  ;; System
+ :aero/aero           {:mvn/version "1.1.6"}
+ :integrant/integrant {:mvn/version "0.8.0"}
+
+ ;; Aliases
+ :lambdaisland/kaocha {:mvn/version "1.80.1274"}
+ :io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}
+
+;; ---------------------------------------------------------
+"```
+
+
+The generated `deps.edn` file in the new project
+
+```clojure title="deps.edn"
+ :deps
+ {;; Service
+  http-kit/http-kit  #:mvn{:version "2.6.0"}  ; latest "2.7.0-alpha1"
+  metosin/reitit     #:mvn{:version "0.5.13"}
+  metosin/reitit-dev #:mvn{:version "0.5.18"} ; human readable exceptions
+
+  ;; Logging
+  com.brunobonacci/mulog             #:mvn{:version "0.9.0"}
+  com.brunobonacci/mulog-adv-console #:mvn{:version "0.9.0"}
+
+  org.slf4j/slf4j-nop #:mvn{:version "1.7.32"} ; suppress http server logger warning
+
+  ;; System
+  aero/aero           #:mvn{:version "1.1.6"}
+  integrant/integrant #:mvn{:version "0.8.0"}
+  org.clojure/clojure #:mvn{:version "1.11.1"}
+}
+</code></pre>
 </div>
 
 <div id="post-tags">
