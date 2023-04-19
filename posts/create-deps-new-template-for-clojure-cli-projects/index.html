@@ -144,11 +144,12 @@
 </code></pre><h2 id="test-templates">Test templates</h2><p>Each template should have a unit test that checks the <code>template.edn</code> file against the <a href="https://github.com/seancorfield/deps-new/blob/develop/src/org/corfield/new.clj">deps-new specification</a></p><p>Tests can be run with a Clojure test runner, e.g. kaocha test runner using <code>:test/run</code> alias from Practicalli Clojure CLI Config.</p><pre><code class="shell">clojure -X:test/run
 </code></pre><p>In Practicalli Project Templates, <code>src/practicalli/service_test.clj</code> defines a unit test with <code>clojure.test</code> and <code>clojure.spec</code>, which test the <code>practicalli/template/service/template.edn</code> configuration.</p><blockquote><p>A unit test is provides when creating a new project via the deps-new template</p></blockquote><h2 id="publish-and-use-template">Publish and Use template</h2><p>Push the new project with custom template to a shared Git service (GitHub, GitLab, etc.)</p><p>Create a release with a Git tag version and a meaningful description, e.g. using the GitHub releases page <a href="https://github.com/practicalli/project-templates/releases">https://github.com/practicalli/project-templates/releases</a></p><p>A alias could be used to add the new template project in the user <code>deps.edn</code> configuration</p><pre><code class="clojure">  :project/templates
   {extra-deps:
-   {io.github.practicalli/project-templates {:git/tag "2023.04.12" :git/sha "3b4e3fa"}}}
+   {io.github.practicalli/project-templates {:git/tag "2023.04.19" :git/sha "975e771"}}}
 </code></pre><p>However, it is simpler to include the new template project as a dependency within the alias to run deps-new, e.g. <code>:project/create</code> alias definition.</p><pre><code class="clojure">  :project/create
   {:replace-deps {io.github.seancorfield/deps-new
                   {:git/tag "v0.5.1" :git/sha "48bf01e"}
-                  io.github.practicalli/project-templates {:git/tag "2023.04.12" :git/sha "3b4e3fa"}}
+                  io.github.practicalli/project-templates
+                  {:git/tag "2023.04.19" :git/sha "975e771"}}
    :exec-fn org.corfield.new/create
    :exec-args {:template practicalli.template/application
                   :name practicalli/playground}}
