@@ -100,7 +100,7 @@
   (assoc grape :clean? true))
 </code></pre><p>Lets give our clean grape function a quick test in the REPL.</p><pre><code class="clojure">(clean-grape {:rotten? false :clean? false})
 ;; =&gt; {:rotten? false, :clean? true}
-</code></pre><h1 id="functional-composition-using-the-thread-last-macro">Functional composition using the thread last macro.</h1><p>Each line passes its evaluate value to the next line as its last argument.  Here is the algorithm we want to create with our code:</p><ul><li>evaluate the name grape-clusters and return the data structure it points to.</li><li>use mapcat to map the split-clusters function over each element in grape-clusters, returning 4 grapes concatenated into one collection</li><li>filter the 4 grapes, dropping the grapes where :rotten? equals true, returning 2 grapes</li><li>update each grape to have a :clean? value of true</li></ul><pre><code class="clojure">(-&gt;&gt; grape-clusters
+</code></pre><h1 id="functional-composition-using-the-thread-last-macro">Functional composition using the thread last macro</h1><p>Each line passes its evaluate value to the next line as its last argument.  Here is the algorithm we want to create with our code:</p><ul><li>evaluate the name grape-clusters and return the data structure it points to.</li><li>use mapcat to map the split-clusters function over each element in grape-clusters, returning 4 grapes concatenated into one collection</li><li>filter the 4 grapes, dropping the grapes where :rotten? equals true, returning 2 grapes</li><li>update each grape to have a :clean? value of true</li></ul><pre><code class="clojure">(-&gt;&gt; grape-clusters
      (mapcat split-cluster)
      (filter not-rotten)
      (map clean-grape))
@@ -198,6 +198,8 @@
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/blog-staging/posts/practicalli-plans-2023/">Practicalli plans for 2023</a></li>
+                        
                         <li><a href="/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">Create deps-new templates for Clojure CLI projects</a></li>
                         
                         <li><a href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Build Emacs from source on Ubuntu Linux</a></li>
@@ -213,8 +215,6 @@
                         <li><a href="/blog-staging/posts/build-emacs-28-on-ubuntu/">Building Emacs 28 on Ubuntu Linux</a></li>
                         
                         <li><a href="/blog-staging/posts/adopt-FreeDesktop.org-XDG-standard-for-configuration-files/">Adopting FreeDesktop.org XDG standard for development tools</a></li>
-                        
-                        <li><a href="/blog-staging/posts/practicalli-plans-for-spring-2022/">Practicalli content plans for Spring 2022</a></li>
                         
                     </ul>
                 </div>
@@ -305,8 +305,6 @@
                         <li><a href="/blog-staging/tags/klipse/">klipse</a></li>
                         
                         <li><a href="/blog-staging/tags/figwheel-main/">figwheel-main</a></li>
-                        
-                        <li><a href="/blog-staging/tags/not%20fetch/">not fetch</a></li>
                         
                         <li><a href="/blog-staging/tags/clojure-core/">clojure-core</a></li>
                         
