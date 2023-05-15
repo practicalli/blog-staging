@@ -570,6 +570,14 @@ http://practical.li/blog-staging/posts/advent-of-parens-2019/index.html
 </url>
 <url>
 <loc>
+http://practical.li/blog-staging/posts/docker-compose-for-clojure-development/index.html
+</loc>
+<lastmod>
+2023-05-15
+</lastmod>
+</url>
+<url>
+<loc>
 http://practical.li/blog-staging/posts/build-emacs-28-on-ubuntu/index.html
 </loc>
 <lastmod>

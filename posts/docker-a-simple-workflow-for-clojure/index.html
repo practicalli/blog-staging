@@ -100,7 +100,7 @@
         - path: ./src
           action: rebuild
 </code></pre><p>Start the services and the file watch mode</p><pre><code class="shell">docker compose up --detach &amp;&amp; docker compose alpha watch
-</code></pre><p>Save changes to files and a new image for the Clojure service will be built and deployed when ready.</p><h2 id="summary">Summary</h2><p>Docker desktop provides lots of tools to support local system integration work before code is sent to a continuous integration service (or as a temporary alternative if that CI service id down)</p><p>Practicalli Project Templates include <code>Dockerfile</code>, <code>.dockerignore</code> and <code>compose.yaml</code> configurations for Clojure development, kick-starting the use of Docker.</p><p>Docker images are a relatively clean way of trying out different services or even different operating systems, e.g.<a href="https://hub.docker.com/_/ubuntu">Ubuntu</a> or <a href="https://hub.docker.com/_/archlinux">ArchLinux</a>.  Deleting the images removes the whole service without affecting the underlying operating system.</p><p><a href="https://practical.li/engineering-playbook/code-quality/megalinter/#megalinter-configuration">MegaLinter</a> is an excellent example of a docker image that provides a large number of tools that would otherwise need to be installed directly on the operating system.</p><ul><li><a href="https://docs.docker.com/desktop/">Docker Desktop Overview</a></li><li><a href="https://docs.docker.com/desktop/extensions/">Docker Desktop Extensions overview</a></li><li><a href="https://docs.docker.com/build/">Docker Build overview</a></li><li><a href="https://docs.docker.com/compose/">Docker Compose Overview</a></li></ul>
+</code></pre><p>Save changes to files and a new image for the Clojure service will be built and deployed when ready.</p><h2 id="summary">Summary</h2><p>Docker desktop provides lots of tools to support local system integration work before code is sent to a continuous integration service (or as a temporary alternative if that CI service id down)</p><p>Practicalli Project Templates include <code>Dockerfile</code>, <code>.dockerignore</code> and <code>compose.yaml</code> configurations for Clojure development, kick-starting the use of Docker.</p><p>Docker images are a relatively clean way of trying out different services or even different operating systems, e.g.<a href="https://hub.docker.com/_/ubuntu">Ubuntu</a> or <a href="https://hub.docker.com/_/archlinux">ArchLinux</a>.  Deleting the images removes the whole service without affecting the underlying operating system.</p><p><a href="https://practical.li/engineering-playbook/code-quality/megalinter/#megalinter-configuration">MegaLinter</a> is an excellent example of a docker image that provides a large number of tools that would otherwise need to be installed directly on the operating system.</p><ul><li><a href="https://docs.docker.com/desktop/">Docker Desktop Overview</a></li><li><a href="https://docs.docker.com/desktop/extensions/">Docker Desktop Extensions overview</a></li><li><a href="https://docs.docker.com/build/">Docker Build overview</a></li><li><a href="https://docs.docker.com/compose/">Docker Compose Overview</a></li></ul><p>Thank you</p><p><a href="https://github.com/practicalli">practicalli GitHub profile</a> I <a href="https://twitter.com/practcial_li">@practical_li</a></p>
 </div>
 
 <div id="post-tags">
@@ -159,6 +159,8 @@
                         
                         <li><a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">Docker Desktop on Ubuntu Linux</a></li>
                         
+                        <li><a href="/blog-staging/posts/docker-compose-for-clojure-development/">Docker Compose for Clojure Development</a></li>
+                        
                         <li><a href="/blog-staging/posts/practicalli-plans-2023/">Practicalli plans for 2023</a></li>
                         
                         <li><a href="/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">Create deps-new templates for Clojure CLI projects</a></li>
@@ -170,8 +172,6 @@
                         <li><a href="/blog-staging/posts/build-and-run-clojure-with-multistage-dockerfile/">Build and run Clojure with Multi-stage Dockerfile</a></li>
                         
                         <li><a href="/blog-staging/posts/make-clojure-tasks-simple-and-consistent/">Make Clojure development tasks simple and consistent</a></li>
-                        
-                        <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
                         
                     </ul>
                 </div>

@@ -93,6 +93,23 @@
     
     <div class="post-header">
         <h2>
+            <a href="/blog-staging/posts/docker-compose-for-clojure-development/">Docker Compose for Clojure Development</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">May 7, 2023</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/docker-logo-name.png" alt="docker logo" />
+        
+    </div>
+    <p>Docker Compose provides a declarative configuration for orchestrating services locally, providing a simple way to spin up services to try them out or orchestrate a whole system from numerous dependent services.</p><p>Compose can build images for Clojure projects and conditionally run based on the health check of other supporting services, e.g. Postgres Database.</p><p>Now that Compose is part of docker, more features such as build on change are being added.</p>
+    <a href="/blog-staging/posts/docker-compose-for-clojure-development/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
             <a href="/blog-staging/posts/practicalli-plans-2023/">Practicalli plans for 2023</a>
         </h2>
         <div id="post-meta">
@@ -123,23 +140,6 @@
     </div>
     <p>Templates are great way to learn how to assemble Clojure libraries into a working project and can save considerable time when creating new projects by providing common configuration, development tools, dependencies and code used by the engineering team.</p><p><a href="https://github.com/seancorfield/deps-new">seancorfield/deps-new</a> provides a simple to understand approach to defining templates. Declarative rules express how file templates are copied to create a new project.  Substitution values are passed to <code>{{unique-key}}</code> placeholders in template files creating a specific project each time.  Programmatic transformation is also supported for significant customisation, e.g. adding options to templates.</p><p><a href="https://github.com/practicalli/project-templates">practicalli/project-templates</a> is a new project to provide comprehensive templates to support production level workflows, including Dockerfile configuration, GitHub continuous integration workflows, etc . Read on to see how the first template was built and learn tips to building your own templates.</p>
     <a href="/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Build Emacs from source on Ubuntu Linux</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">March 11, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/emacs-logo-name.png" alt="emacs logo" />
-        
-    </div>
-    <p>Emacs 29 will be the next stable release later in 2023 adding major features: Eglot LSP client, Tree-Sitter language parser and <code>package.el</code> package install from Git repositories. more features to enhance and improved every day use of Emacs.</p><p>Building Emacs from source is a relatively straight forward way to try out some or all of these features in advance, especially useful for those maintaining or developing new tools on top of Emacs.</p><blockquote><p><a href="https://blog.phundrak.com/emacs-29-what-can-we-expect/">Emacs 29 - what to expect</a> - a brief summary of the major features</p></blockquote>
-    <a href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Continue reading &#8594;</a>
     <hr>
     
 
@@ -174,6 +174,8 @@
                         
                         <li><a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">Docker Desktop on Ubuntu Linux</a></li>
                         
+                        <li><a href="/blog-staging/posts/docker-compose-for-clojure-development/">Docker Compose for Clojure Development</a></li>
+                        
                         <li><a href="/blog-staging/posts/practicalli-plans-2023/">Practicalli plans for 2023</a></li>
                         
                         <li><a href="/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">Create deps-new templates for Clojure CLI projects</a></li>
@@ -185,8 +187,6 @@
                         <li><a href="/blog-staging/posts/build-and-run-clojure-with-multistage-dockerfile/">Build and run Clojure with Multi-stage Dockerfile</a></li>
                         
                         <li><a href="/blog-staging/posts/make-clojure-tasks-simple-and-consistent/">Make Clojure development tasks simple and consistent</a></li>
-                        
-                        <li><a href="/blog-staging/posts/clojurescript-workflow-with-clojure-cli-tools-and-figwheel-main/">ClojureScript workflow with Clojure CLI tools and Figwheel-main</a></li>
                         
                     </ul>
                 </div>
