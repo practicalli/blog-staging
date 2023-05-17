@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: Advent Of Parens 2019 - feast on Clojure this holiday season</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/posts/advent-of-parens-2019/">
+    <title>Practicalli: Accessing AWS with Clojure from scratch</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/access-aws-with-clojure-from-scratch/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -58,41 +58,39 @@
 <div id="post">
     <div class="post-header">
     <div id="post-meta" class="row">
-        <div class="col-lg-6">December 1, 2019</div>
+        <div class="col-lg-6">May 17, 2023</div>
         
     </div>
-    <h2>Advent Of Parens 2019 - feast on Clojure this holiday season</h2>
+    <h2>Accessing AWS with Clojure from scratch</h2>
 
     <!-- conditional topic logo displayed if :topic has value in a post -->
     
-    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-logo-name.png" alt="clojure logo - post topic" />
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/git-logo-name.png" alt="git logo - post topic" />
     
 </div>
 <div>
     
-    <!-- GitHub issue:  --><!-- https://github.com/practicalli/blog-content/issues/34 --><p>The holiday season is know for over indulge, so why not stuff your head full of Clojure and functional programming.  Its far healthier than the alternatives :)</p><p>To help you indulge, <a href="https://lambdaisland.com/blog/2019-11-25-advent-of-parens">Arne from LambdaIsland</a>, <a href="https://porkostomus.gitlab.io/">Bobby Towers</a>, <a href="https://alexanderoloo.com/">Alexander Oloo</a> and I are writing a blog post each day as part of the Advent Of Parens 2019 celebration.  Every day we plan to publish a short posts that share tips and experiences with functional programming and Clojure.</p><p>You can find the articles I am planning to write on the <a href="https://github.com/practicalli/blog-content/projects/1?card_filter_query=label%3Aadvent-of-parens">practicalli blog project board</a>.</p><p>While you wait to open these posts each day of December, I am kickstarting your feast of Clojure in this article.</p><p>I also encourage you to take some time over the holiday season to practice Clojure</p><ul><li><a href="/blog-staging/posts/clojure-advent-of-code-2019/">Clojure Advent of Code</a></li><li><a href="https://www.youtube.com/watch?v=MZcuL4lRw5E&amp;list=PLpr9V-R8ZxiDjyU7cQYWOEFBDR1t7t0wv">Practicalli Clojure study group</a></li></ul><!-- more --><div style="float: right">
-[![Clojure TV - years worth of videos from Clojure conj conference](https://clojure.org/images/clojuretv.png | width=180)](https://www.youtube.com/user/ClojureTV)
-</div><h2 id="discover-new-ideas-with-clojure-videos">Discover new ideas with Clojure videos</h2><p><a href="https://www.youtube.com/user/ClojureTV">Clojure TV YouTube channel</a> has hundreds of videos from Clojure Conj conferences over the last 6 years.  Some of my favourites include</p><ul><li><a href="https://www.youtube.com/watch?v=MnvtPzEH-d8&amp;list=PLZdCLR02grLqSy15ALLAZDU6LGpAJDrAQ">Follow the Data: Product Development in Clojure - Derek Troy-West</a></li><li><a href="https://www.youtube.com/watch?v=U99UHYUW63k&amp;list=PLZdCLR02grLqSy15ALLAZDU6LGpAJDrAQ&amp;index=5">From Lazy Lisper to Confident Clojurist - Alexander Oloo</a></li><li><a href="https://www.youtube.com/watch?v=m0rSJ9xdsdk&amp;list=PLZdCLR02grLqSy15ALLAZDU6LGpAJDrAQ&amp;index=10">Interactive Programming for Artificial Intelligence - Dragan Djuric</a></li><li><a href="https://www.youtube.com/watch?v=OUZZKtypink&amp;list=PLZdCLR02grLqSy15ALLAZDU6LGpAJDrAQ&amp;index=11">Sherlock Holmes, Consulting Developer - Stuart Halloway</a></li></ul><p>Or just sit back and watch <a href="https://www.youtube.com/watch?v=MnvtPzEH-d8&amp;list=PLZdCLR02grLqSy15ALLAZDU6LGpAJDrAQ">all the amazing Clojure/conj 2019 talks</a> back to back</p><blockquote><p><a href="https://www.youtube.com/channel/UCbZW8yCqEncYciie8_1yy7w">reClojure conference videos</a> will be available soon, subscribe to find out when the are published</p></blockquote><div style="float: right">
-[![Practicalli Clojure Study group](/images/practicalli-banner-icons-full-horizontal.png | width=320)](https://practicalli.github.io/)
-</div><h2 id="studying-clojure">Studying Clojure</h2><p>For the last year I have run a YouTube based study and there are over 50 hours of video,  introducing Clojure concepts and building applications with Clojure and ClojureScript.</p><p>See the Clojure Study group playlist for all the videos.  I am currently creating videos to introduce Clojure CLI and tools.deps approach to Clojure and ClojureScript projects.</p><p>TODO create a playlist for just the 4Clojure solutions</p><p>start learning Clojure CLI and tools.deps approach for Clojure</p><blockquote><p>Discuss any of the content that Practicalli creates on the <a href="https://clojurians.slack.com/messages/practicalli">#practicalli channel of the Clojurians Slack community</a>.</p></blockquote><p>There are several excellent professional courses and tutorials available to help you deep dive into specific areas.  Take some time out and learn something new for the new year.</p><ul><li><a href="https://lambdaisland.com/blog/2019-11-25-advent-of-parens">Lambda Island</a> - high quality and effective video tutorials on Clojure, with detailed transcripts</li><li><a href="https://purelyfunctional.tv/">Purelyfunctional.tv</a> - comprehensive training courses for Clojure</li><li><a href="https://www.learnreframe.com/">Learn re-frame</a> - a detailed video-based course from an experienced JavaScript &amp; ClojureScript developer, Jacek Schae</li></ul><h2 id="cool-projects-to-try-out">Cool projects to try out</h2><p><a href="https://github.com/porkostomus/mecca-pix">Bobby Towers</a> has some excellent projects that are very creative and inspiring projects, so great fun for all over the holiday season.</p><ul><li>Games: Conways Game of Life, Sudoku, Minesweeper, Tic-tac on my toe</li><li>Music: <a href="https://github.com/porkostomus/mecca-pix">MECCA Music Platform</a>, Exploring MIDI files,</li><li>Graphics: <a href="https://github.com/porkostomus/mecca-pix">Convert images into SVG</a></li></ul><p><a href="https://github.com/borkdude">Michiel Borkent</a> has been a prolific developer in the Clojure community, creating many excellent projects this year.  It is definitely worth investing a little time getting to know these projects</p><ul><li><a href="https://github.com/borkdude/re-find">re-find</a> - to find a function based on arguments and expected return value.  Try the <a href="https://borkdude.github.io/re-find.web/">re-find website</a> too.</li><li>clj-kondo - my favourite Clojure lint tool that can be used interactively in your editor or as a script in a CI or other batch process.</li><li><a href="https://github.com/borkdude/jet">jet</a> - a command line tool to transform between JSON, EDN and Transit</li><li><a href="https://github.com/borkdude/babashka">babashka</a> - when you want to write Clojure rather than a bash script</li></ul><h2 id="clojure-podcasts">Clojure podcasts</h2><p>There are many engaging discussions on Clojure and functional programming in the following podcasts.</p><ul><li><p><a href="https://www.youtube.com/channel/UC1UxEQuBvfLJgWR5tk_XIXA">Apropos cast</a> - an eclectic discussion and collaborative hack session with Clojure.</p></li><li><p><a href="https://clojurescriptpodcast.com/">clojurescript podcast</a> - with many Clojure and ClojureScript contributors, giving a deep insight into the language and development aproach.</p></li><li><p><a href="https://clojuredesign.club/">clojure design club</a> - a very enjoyable discussion between two experienced developers working with Clojure, discussing issues raised by the community.</p></li><li><p><a href="http://blog.cognitect.com/cognicast">cognicast</a> - a long running podcast from the stewards of the Clojure language</p></li><li><p><a href="https://twitter.com/defnpodcast?lang=en">defn podcast</a> - an enjoyable but occasionally sweary podcast by one of the characters in the Clojure community.</p></li><li><p><a href="https://www.therepl.net/">The REPL</a> - regular news about Clojure and activities in the community (also a mailing list)</p></li><li><p><a href="https://www.youtube.com/channel/UC5G6p4wwKuDKZsgDrbp5j5A">JUXT Cast</a> - a new broadcasts from the development team at JUXT, a very active Clojure consultancy company</p></li></ul><p>I listen to these podcasts when I go for a walk in the park or shopping for fresh fruit and vegetables.</p><h2 id="summary">Summary</h2><p>I hope you enjoy the rich content available in the Clojure community and have a very merry Clojure holiday season.</p><p>If there are any topics or tips you need help with, please get in touch via the <a href="https://clojurians.slack.com/messages/practicalli">Clojurians Slack community</a>.</p>
+    <p>Walk through form nothing to a simple Clojure code to access S3 buckets</p><p>The hardest part of using Clojure with AWS has nothing to do with Clojure.  Setting up accounts and access to those accounts will take most of the work, so hopefully this article helps short-cut that.</p><p>Hopefully this will save the several hours I had of wading through the AWS pages on setting up accounts which have many different options.  This isnt the most optimum or secure approach, but for a quick start to using Clojure it is sufficient.  Don't use this approach for any company secrets or sensitive information.</p><h2 id="create-root-account">Create Root account</h2><p>Create a root account - master account to manage other accounts</p><p>Add 2-Factor authentication (Practicalli uses the <a href="https://authy.com/">Authy app</a> for 2-Factor authentication)</p><p>Save the account with your favourite password manager.</p><h2 id="create-iam-user">Create IAM User</h2><p>Login to AWS Management Console with root account and create an IAM user</p><ul><li>Create new group containing Permissions to access the relevant AWS services, e.g. AwsS3FullAccess</li><li>Add user to the group (I missed this step out initially, not sure how as I created the group as I was creating the user)</li><li>Once the IAM user has been created, create an Access Key (key and secret)</li></ul><h2 id="install-aws-cli-2">Install AWS CLI 2</h2><p>Download, extract, run install</p><h2 id="configure-aws-cli">Configure AWS CLI</h2><p>Use AWS CLI to create a configuration, using its wizard</p><pre><code class="shell">aws configure
+</code></pre><p>Enter the access key and access key secret when prompted</p><p>Enter the default region</p><p>The wizard creates two files</p><ul><li><code>~/.aws/config</code> containing the <code>default</code> profile</li><li><code>~/.aws/credentials</code> containing the AWS access key and secret (this is a plain text file, so not secure if someone hacks into your computer)</li></ul><h2 id="install-clojure">Install Clojure</h2><p><a href="">Practicalli guide to install Clojure CLI</a></p><blockquote><p>Leiningen should also work, although this tool was not tested</p></blockquote><h2 id="cognitect-labs-aws-apis">Cognitect Labs AWS API's</h2><p>Now for the easy bit :)</p><ul><li>create a new project (link to Practicalli Project templates)</li><li>add library dependency</li><li>start repl</li></ul><pre><code class="shell">clojure -M:repl/reloaded
+</code></pre><ul><li><p>open project in favorite editor &amp; connect to the REPL process</p></li><li><p>create a rich comment and start to experiment with clojure</p></li></ul><p>Example creating an S3 bucket, adding a file and reading the contents of a file.</p><blockquote><p>A REPL restart (stop/start) is required if the AWS environment variables are changed, otherwise the changes will not be recognised.</p></blockquote>
 </div>
 
 <div id="post-tags">
     <b>Tags: </b>
     
-    <a href="/blog-staging/tags/clojure/">clojure</a>
+    <a href="/blog-staging/tags/termina-ui/">termina-ui</a>
     
-    <a href="/blog-staging/tags/advent-of-parens/">advent-of-parens</a>
+    <a href="/blog-staging/tags/tui/">tui</a>
+    
+    <a href="/blog-staging/tags/git/">git</a>
     
 </div>
 
 
     <div id="prev-next">
         
-        <a href="/blog-staging/posts/clojure-advent-of-code-2019/">&laquo; Clojure Advent Of Code - a fun way to learn</a>
         
-        
-        <a class="right" href="/blog-staging/posts/consuming-apis-with-clojure/">Consuming APIs from Clojure &raquo;</a>
+        <a class="right" href="/blog-staging/posts/docker-a-simple-workflow-for-clojure/">Docker: a simple workflow for Clojure &raquo;</a>
         
     </div>
 
@@ -100,8 +98,8 @@
     <div id="disqus_thread"></div>
     <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = "http://practical.li/blog-staging/posts/advent-of-parens-2019/";
-            this.page.identifier = "Advent Of Parens 2019 - feast on Clojure this holiday season";
+            this.page.url = "http://practical.li/blog-staging/posts/access-aws-with-clojure-from-scratch/";
+            this.page.identifier = "Accessing AWS with Clojure from scratch";
         };
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
