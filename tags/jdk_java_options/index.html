@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli</title>
-    <link rel="canonical" href="http://practical.li">
+    <title>Practicalli: Posts Tagged &quot;jdk_java_options&quot;</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/tags/jdk_java_options/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -31,7 +31,7 @@
 
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li  class="active" ><a href="/blog-staging/">Home</a></li>
+                <li ><a href="/blog-staging/">Home</a></li>
                 <li
                 ><a href="/blog-staging/archives/">Archives</a></li>
                 
@@ -55,100 +55,17 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="post">
+<div id="posts-by-tag">
+    <div id="page-header">
+        <h2>Posts Tagged &quot;jdk_java_options&quot;</h2>
+    </div>
+    <ul>
     
-    <div class="post-header">
-        <h2>
+        <li>
             <a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Java JVM Options for running Clojure</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">August 15, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/java-logo-name.png" alt="java logo" />
-        
-    </div>
-    <p>Clojure may benefit from setting options to alter the default behaviour of the Java Virtual Machine (JVM), especially when running in a constrained environment or if performance issues have been detected.</p><p><code>JDK_JAVA_OPTIONS</code> is the official Environment Variable for setting options with the <code>java</code> command (Java version 9 onward) and used by deployment systems to inject JVM options into container environments.</p><p><code>:jvm-opts</code> key within Clojure CLI aliases define JVM options to support local development along with JVM  options on the command line.</p>
-    <a href="/blog-staging/posts/running-clojure-code-with-java-and-jvm-options/">Continue reading &#8594;</a>
-    <hr>
+        </li>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/pin-emacs-package-to-manage-issues/">Pin Emacs packages to manage issues</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">August 15, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/spacemacs-logo-name.png" alt="spacemacs logo" />
-        
-    </div>
-    <p>Emacs provides a huge amount of features via packages. Community configurations like Spacmacs orchestrate packages so they work seemlessly together.  It is rare, but sometimes a package will have a breaking issue.</p><p><a href="https://melpa.org/#/">Melpa</a> provides (5,544) up-to-date packages  automatically built from each projects Git repository. Builds are defined by a recipe for each package.</p><p>A custom recipe can be used to control which version of a package is used with the Emacs configuration, to work around issues or changes to a package.</p>
-    <a href="/blog-staging/posts/pin-emacs-package-to-manage-issues/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/access-aws-with-clojure-from-scratch/">Accessing AWS with Clojure from scratch - simple approach</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">May 17, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/aws-logo-name.png" alt="aws logo" />
-        
-    </div>
-    <p><a href="https://github.com/cognitect-labs/aws-api">Cognitect Labs AWS API</a> is an excellent data driven Clojure library for interacting with AWS from code.  Essentially a client for an AWS Service is created which operations are invoked.  The project includes working code examples (<em>once a working AWS account is configured</em>).</p><p>The hardest is configuring suitable AWS accounts, programmatic access and service permissions, especially when new to AWS.  This article starts with nothing and steps through the simplest and quickest AWS account and permission setup, using the <a href="https://aws.amazon.com/free/">"AWS Free Tier"</a>.  Note: every service has quota limits and some services are only free for a period of time (free trials &amp; 12 months free).</p><p>The approach outlined is not intended for commercial work, only the bare essentials to start exploring what is possible with the Cognitect Labs library.  (Or you could try out <a href="https://localstack.cloud/">LocalStack if you have docker installed locally</a>).</p>
-    <a href="/blog-staging/posts/access-aws-with-clojure-from-scratch/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/docker-a-simple-workflow-for-clojure/">Docker: a simple workflow for Clojure</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">May 15, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/docker-logo-name.png" alt="docker logo" />
-        
-    </div>
-    <p>Docker enables a consistent approach to building and running Clojure projects along with a range of other services locally (database, cache, streams, etc.), The Clojure project is built from source when starting services (a <code>watch</code> feature can rebuild on code changes). Heath checks and conditions are set to ensure dependant services start in the correct order.</p><p>Running Docker is relatively fast once image overlays (layers) are cached on their first run, so its a viable approach for local system integration testing and acceptance testing, before pushing changes to a remote Continuous Integration service.</p><p>A Docker workflow complements a <a href="https://practical.li/clojure/introduction/repl-workflow/">REPL Driven Development workflow</a>, it does not replace it.  The main development effort should be more effective via a REPL connected editor with Docker Compose focused on orchestration of services.</p>
-    <a href="/blog-staging/posts/docker-a-simple-workflow-for-clojure/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">Docker Desktop on Ubuntu Linux</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">May 15, 2023</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/docker-logo-name.png" alt="docker logo" />
-        
-    </div>
-    <p>Docker can support local development and provide an effective workflow for system integration before changes are pushed to a remote continuous integration service. Docker can be used to spin up local databases and persist data in a volume, helping keep a separation between applications and supporting test of schema changes, migrations and data loading.</p><p>Docker desktop simplifies the install and provides a desktop client to manage docker images, containers, volumes and the new dev environments.  <a href="https://hub.docker.com/search?q=&amp;type=extension">Extensions Marketplace for Docker Desktop</a> provides tooling to unify logging, manage local resources and many more</p><p>The Docker install instructions are more of a reference of information than a simple tutorial. Essential Docker Community Edition is installed via the Docker package archive and Docker Desktop is installed from a <a href="https://docs.docker.com/desktop/install/ubuntu/">manually downloaded DEB file</a>.</p>
-    <a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">Continue reading &#8594;</a>
-    <hr>
-    
-
-    <div id="prev-next">
-        
-        
-        <a class="right" href="/blog-staging/p/2/">Next &raquo;</a>
-        
-    </div>
+    </ul>
 </div>
 
             </div>
