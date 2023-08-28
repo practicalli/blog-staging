@@ -59,6 +59,23 @@
     
     <div class="post-header">
         <h2>
+            <a href="/blog-staging/posts/cider-jack-in-to-clojure-cli-projects-from-spacemacs/">CIDER jack-in to Clojure CLI projects from Spacemacs</a>
+        </h2>
+        <div id="post-meta">
+            
+            <div class="date">July 16, 2019</div>
+        </div>
+        <!-- conditional topic logo displayed if :topic has value in a post -->
+        
+        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/spacemacs-logo-name.png" alt="spacemacs logo" />
+        
+    </div>
+    <p>Running a Clojure project created with CLI tools or <code>clj-new</code> may require you to pass in an alias for the REPL to pick up the right libraries.</p><p>A few days ago I created a new ClojureScript and reagent project, using the Clojure CLI tools and <code>clj-new</code> project creation tool, which converts Leiningen and Boot templates into a deps.edn based project.  Unfortunately when I created a project from the fighwheel-main template the REPL failed to run from CIDER using <code>cider-jack-in-cljs</code>, saying that figwheel-main was not found.  All that was required was to specify the <code>:fig</code> alias when running a REPL.</p><p>This article covers two approaches to running Clojure CLI projects from CIDER jack-in that require setting of an alias or multiple aliases e.g. <code>-A:fig:build:party:hammock</code></p>
+    <a href="/blog-staging/posts/cider-jack-in-to-clojure-cli-projects-from-spacemacs/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
+        <h2>
             <a href="/blog-staging/posts/clojure-cli-and-tools-deps/">Clojure CLI and tools.deps</a>
         </h2>
         <div id="post-meta">
@@ -123,23 +140,6 @@
     <a href="/blog-staging/posts/yasnippets-for-faster-clojure-development/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>
-            <a href="/blog-staging/posts/transducers-in-clojure-getting-started/">Clojure Transducers - Getting Started</a>
-        </h2>
-        <div id="post-meta">
-            
-            <div class="date">June 15, 2016</div>
-        </div>
-        <!-- conditional topic logo displayed if :topic has value in a post -->
-        
-        <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/clojure-logo-name.png" alt="clojure logo" />
-        
-    </div>
-    <p>Transducers are built upon the design principle in Clojure of composing functions together, allowing you to elegantly abstract functional composition and create a workflow that will transform data without being tied to a specific context.  So what does that actually mean and what does the code look like?  Is there a transducer function or is it just extensions to existing functions.  These are the questions we will explore and answer.</p><blockquote><p>A good understanding of functions such as map &amp; reduce and composing functions with the threading macros is recommended before writing code with Transducers.</p></blockquote><p>This is my interpretation of the really great introduction to Transducers from <a href="https://funcool.github.io/clojurescript-unraveled/">Clojurescript Unraveled</a>, expanded with additional code and my own comments.</p>
-    <a href="/blog-staging/posts/transducers-in-clojure-getting-started/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -180,13 +180,13 @@
                         
                         <li><a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">Docker Desktop on Ubuntu Linux</a></li>
                         
+                        <li><a href="/blog-staging/posts/clojure-development-on-debian-linux/">Clojure Development on Debian Linux</a></li>
+                        
                         <li><a href="/blog-staging/posts/docker-compose-for-clojure-development/">Docker Compose for Clojure Development</a></li>
                         
                         <li><a href="/blog-staging/posts/practicalli-plans-2023/">Practicalli future plans</a></li>
                         
                         <li><a href="/blog-staging/posts/create-deps-new-template-for-clojure-cli-projects/">Create deps-new templates for Clojure CLI projects</a></li>
-                        
-                        <li><a href="/blog-staging/posts/build-emacs-from-source-on-ubuntu-linux/">Build Emacs from source on Ubuntu Linux</a></li>
                         
                     </ul>
                 </div>
@@ -199,6 +199,8 @@
                         <li><a href="/blog-staging/tags/json/">json</a></li>
                         
                         <li><a href="/blog-staging/tags/ring/">ring</a></li>
+                        
+                        <li><a href="/blog-staging/tags/debian/">debian</a></li>
                         
                         <li><a href="/blog-staging/tags/very%20fetch/">very fetch</a></li>
                         
@@ -241,6 +243,8 @@
                         <li><a href="/blog-staging/tags/hardware/">hardware</a></li>
                         
                         <li><a href="/blog-staging/tags/make/">make</a></li>
+                        
+                        <li><a href="/blog-staging/tags/workflow/">workflow</a></li>
                         
                         <li><a href="/blog-staging/tags/cider/">cider</a></li>
                         

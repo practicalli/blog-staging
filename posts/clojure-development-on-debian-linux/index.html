@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Practicalli: Posts Tagged &quot;cryogen&quot;</title>
-    <link rel="canonical" href="http://practical.li/blog-staging/tags/cryogen/">
+    <title>Practicalli: Clojure Development on Debian Linux</title>
+    <link rel="canonical" href="http://practical.li/blog-staging/posts/clojure-development-on-debian-linux/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -55,21 +55,61 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="posts-by-tag">
-    <div id="page-header">
-        <h2>Posts Tagged &quot;cryogen&quot;</h2>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">May 7, 2023</div>
+        
     </div>
-    <ul>
+    <h2>Clojure Development on Debian Linux</h2>
+
+    <!-- conditional topic logo displayed if :topic has value in a post -->
     
-        <li>
-            <a href="/blog-staging/posts/automate-cryogen-clojure-blog-with-github-actions/">Automate Cryogen Clojure blog with GitHub Actions</a>
-        </li>
+    <img class="topic" src="https://raw.githubusercontent.com/practicalli/graphic-design/live/topic-images/debian-logo-name.png" alt="debian logo - post topic" />
     
-        <li>
-            <a href="/blog-staging/posts/clojure-powered-blogging-with-cryogen/">Clojure powered blogging with Cryogen</a>
-        </li>
+</div>
+<div>
     
-    </ul>
+    <p>Debian Linux is one of the original and longest running community distributions, in large part due to the excellent <code>deb</code> package management system and the openness of the contribution process.</p><p>Debian has inspired a large number of other community distributions, most notably Ubuntu.</p><p>Debian provides a highly flexible foundation for Clojure development.</p><h2 id="install-debian">Install Debian</h2><p>Download the Debian Net install minimal ISO image and burn to a CD or USB memory stick (flash drive).</p><blockquote><p>Debian Net install ISO only containes the essential debian packages to run a Linux system.  Additional requested packages are downloaded via an internet connection from a local mirror.</p></blockquote><p>Boot the computer from the Debian ISO image and follow the install wizard, selecting additional software as required.  Specific packages can be added at any time after the install has completed.</p><h3 id="administration">Administration</h3><p>Debian recommends admistrative tasks such as installing software be carried out by the root user.  The sudo package is used by some Linux distributions to allow a non-root user account to act as root, although Debian maintainers decided this was more of a security risk.</p><blockquote><p><code>sudo</code> package is available in the Debian package repository should that approach be required.</p></blockquote><p>During the Debian install, a root user account password is set.</p><p><code>su -</code> switches to the root user account (first prompting for the root password)</p><p><code>apt</code> is the advance package tool that manages the install (and removal) of debian packages.</p><p><code>apt install package-name</code> installs the specified package along with any packages it depends upon.  Recommended packages are also suggested (documentation or related packages).</p><p><code>apt update</code> will update the list of available packages from all repositories.</p><p><code>apt upgrade</code> installs the latest versions of packages and is typically run after <code>apt update</code>.</p><p><code>apt search package-name</code> will search for the package-name provided.</p><p><code>apt show package-name</code> displays details of the package, including the available version and any dependant packages</p><h2 id="clojure-cli">Clojure CLI</h2><p>The Linux install script for Clojure CLI will add the <code>clojure</code> binary and <code>clj</code> wrapper to <code>/usr/local/bin</code>, making it available to all users.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog-staging/tags/debian/">debian</a>
+    
+    <a href="/blog-staging/tags/clojure/">clojure</a>
+    
+    <a href="/blog-staging/tags/workflow/">workflow</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/blog-staging/posts/docker-desktop-on-ubuntu-linux/">&laquo; Docker Desktop on Ubuntu Linux</a>
+        
+        
+        <a class="right" href="/blog-staging/posts/docker-compose-for-clojure-development/">Docker Compose for Clojure Development &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://practical.li/blog-staging/posts/clojure-development-on-debian-linux/";
+            this.page.identifier = "Clojure Development on Debian Linux";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//practicalli-blog.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
             </div>
