@@ -91,6 +91,8 @@ The Clojure CLI install includes a configuration:</p><ul><li>adds <code>src</cod
     "clojars" {:url "https://repo.clojars.org/"}
   }
 }
+</code></pre><h2 id="neovim">Neovim</h2><p>Debian 12 includes Neovim 0.7.2, although Practicalli recommends downloading the <a href="https://github.com/neovim/neovim/releases/tag/stable">latest Neovim release from GitHub</a>.</p><p>Move the <code>nvim.appimage</code> file to the local bin directory, adding it to the operating system execution path.</p><pre><code class="shell">mv nvim.appimage ~/.local/bin/nvim.appimage
+</code></pre><p>Create a symbolic link to allow neovim to be run using the command <code>nvim</code></p><pre><code class="shell">ln -s ~/.local/bin/nvim.appimage ~/.local/bin/nvim
 </code></pre>
 </div>
 
